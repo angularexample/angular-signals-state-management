@@ -22,3 +22,12 @@ To start a local development server, run:
 ```bash
 ng serve
 ```
+
+## Project Setuo
+
+### Install Angular Material
+
+```
+ng add @angular/material
+```
+

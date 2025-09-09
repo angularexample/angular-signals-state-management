@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnInit, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
 import { XxxContentType } from '../../core/xxx-content/xxx-content-types';

@@ -1,4 +1,4 @@
-import { XxxContentType, XxxContentStatus } from "./xxx-content-types";
+import { XxxContentType, XxxContentStatus } from './xxx-content-types';
 
 export const mockContentHome: XxxContentType = {
   contentModel: {

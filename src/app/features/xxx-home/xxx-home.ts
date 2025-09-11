@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
-import { XxxContentType } from "../../core/xxx-content/xxx-content-types";
+import { XxxContentType } from '../../core/xxx-content/xxx-content-types';
 import { XxxContent } from '../../core/xxx-content/xxx-content';
-import { XxxContentFacade } from "../../core/xxx-content/xxx-content-facade";
+import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
 import { XxxSanitizePipe } from '../../core/xxx-sanitize/xxx-sanitize-pipe';
 
 @Component({

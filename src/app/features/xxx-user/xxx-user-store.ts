@@ -1,12 +1,12 @@
-import { catchError, of } from "rxjs";
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { XxxAlert } from "../../core/xxx-alert/xxx-alert";
-import { XxxHttpUtilities } from "../../core/xxx-utilities/xxx-http-utilities";
-import { XxxLoadingService } from "../../core/xxx-loading/xxx-loading-service";
-import { XxxUserApiResponse, xxxUserInitialState, XxxUserState, XxxUserType } from "./xxx-user-types";
-import { XxxUserData } from "./xxx-user-data"
+import { catchError, of } from 'rxjs';
+import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { XxxAlert } from '../../core/xxx-alert/xxx-alert';
+import { XxxHttpUtilities } from '../../core/xxx-utilities/xxx-http-utilities';
+import { XxxLoadingService } from '../../core/xxx-loading/xxx-loading-service';
+import { XxxUserApiResponse, xxxUserInitialState, XxxUserState, XxxUserType } from './xxx-user-types';
+import { XxxUserData } from './xxx-user-data'
 
 /**
  * XxxUserStore is the feature state for the user page.

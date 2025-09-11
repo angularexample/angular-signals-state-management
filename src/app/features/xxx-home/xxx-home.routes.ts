@@ -1,5 +1,5 @@
-import { Route } from "@angular/router";
-import { XxxHome } from "./xxx-home";
+import { Route } from '@angular/router';
+import { XxxHome } from './xxx-home';
 
 export const xxxHomeRoutes: Route[] = [
   {

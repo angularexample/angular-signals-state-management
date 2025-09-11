@@ -1,6 +1,6 @@
 import { inject, Injectable, Signal } from '@angular/core';
-import { XxxContentType } from "./xxx-content-types";
-import { XxxContentStore } from "./xxx-content-store";
+import { XxxContentType } from './xxx-content-types';
+import { XxxContentStore } from './xxx-content-store';
 
 @Injectable({
   providedIn: 'root'

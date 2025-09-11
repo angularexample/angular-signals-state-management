@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit, Signal } from '@angular/core';
-import { XxxContentFacade } from "./xxx-content-facade";
+import { XxxContentFacade } from './xxx-content-facade';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

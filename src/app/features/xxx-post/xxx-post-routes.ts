@@ -1,6 +1,6 @@
-import { Route } from "@angular/router";
-import { XxxPost } from "./xxx-post";
-import { XxxPostEdit } from "./xxx-post-edit/xxx-post-edit";
+import { Route } from '@angular/router';
+import { XxxPost } from './xxx-post';
+import { XxxPostEdit } from './xxx-post-edit/xxx-post-edit';
 
 export const xxxPostRoutes: Route[] = [
   {

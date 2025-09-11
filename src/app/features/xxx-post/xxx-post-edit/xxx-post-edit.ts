@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
-import { debounceTime, distinctUntilChanged } from "rxjs";
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { XxxContentType } from "../../../core/xxx-content/xxx-content-types";
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { XxxContentType } from '../../../core/xxx-content/xxx-content-types';
 import { XxxContent } from '../../../core/xxx-content/xxx-content';
-import { XxxContentFacade } from "../../../core/xxx-content/xxx-content-facade";
-import { XxxPostType, xxxPostFormDataInitial } from "../xxx-post-types";
-import { XxxPostFacade } from "../xxx-post-facade";
+import { XxxContentFacade } from '../../../core/xxx-content/xxx-content-facade';
+import { XxxPostType, xxxPostFormDataInitial } from '../xxx-post-types';
+import { XxxPostFacade } from '../xxx-post-facade';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

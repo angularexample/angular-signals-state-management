@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
 import { XxxContentType } from '../../core/xxx-content/xxx-content-types';
-import { XxxContent } from "../../core/xxx-content/xxx-content";
+import { XxxContent } from '../../core/xxx-content/xxx-content';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

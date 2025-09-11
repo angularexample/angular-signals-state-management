@@ -12,7 +12,7 @@ import { XxxUserStore } from "../xxx-user/xxx-user-store";
 /**
  * XxxPostStore is the feature state for the post page.
  * State management for Angular using only Signals and RxJS.
- * If you already know NgRx then we have organized it using the same categories.
+ * If you already know NgRx, then we have organized it using the same categories.
  */
 @Injectable({
   providedIn: 'root'
@@ -75,39 +75,39 @@ export class XxxPostStore {
 
 
   // Selectors
-  readonly $isNoSelectedPost_: Signal<boolean> = computed(() => this.$postState().selectedPostId === undefined);
+  readonly $selectIsNoSelectedPost: Signal<boolean> = computed(() => this.$postState().selectedPostId === undefined);
 
-  readonly $isNoSelectedUser_: Signal<boolean> = this.userStore.$isNoSelectedUser_;
+  readonly $selectIsNoSelectedUser: Signal<boolean> = this.userStore.$selectIsNoSelectedUser;
 
-  readonly $isPostsEmpty_: Signal<boolean> = computed(() => !this.$postState().isPostsLoading && this.$postState().posts.length === 0);
+  readonly $selectIsPostsEmpty: Signal<boolean> = computed(() => !this.$postState().isPostsLoading && this.$postState().posts.length === 0);
 
-  readonly $isPostsLoaded_: Signal<boolean> = computed(() => this.$postState().posts.length > 0);
+  readonly $selectIsPostsLoaded: Signal<boolean> = computed(() => this.$postState().posts.length > 0);
 
-  readonly $isPostsLoading_: Signal<boolean> = computed(() => this.$postState().isPostsLoading);
+  readonly $selectIsPostsLoading: Signal<boolean> = computed(() => this.$postState().isPostsLoading);
 
-  readonly $isPostUpdating_: Signal<boolean> = computed(() => this.$postState().isPostUpdating);
+  readonly $selectIsPostUpdating: Signal<boolean> = computed(() => this.$postState().isPostUpdating);
 
-  readonly $selectedPostId_: Signal<number | undefined> = computed(() => this.$postState().selectedPostId);
+  readonly $selectSelectedPostId: Signal<number | undefined> = computed(() => this.$postState().selectedPostId);
 
-  private readonly $postForm_: Signal<XxxPostType | undefined> = computed(() => this.$postState().postForm);
+  private readonly $selectPostForm: Signal<XxxPostType | undefined> = computed(() => this.$postState().postForm);
 
-  readonly $posts_: Signal<XxxPostType[]> = computed(() => this.$postState().posts);
+  readonly $selectPosts: Signal<XxxPostType[]> = computed(() => this.$postState().posts);
 
-  readonly $selectedPost_: Signal<XxxPostType | undefined> = computed(() => {
+  readonly $selectSelectedPost: Signal<XxxPostType | undefined> = computed(() => {
     let post: XxxPostType | undefined;
-    const posts: XxxPostType[] = this.$posts_();
-    const postId: number | undefined = this.$selectedPostId_();
+    const posts: XxxPostType[] = this.$selectPosts();
+    const postId: number | undefined = this.$selectSelectedPostId();
     if (postId !== undefined && posts.length > 0) {
       post = posts.find(item => item.id === postId);
     }
     return post;
   });
 
-  readonly $isSaveButtonDisabled_: Signal<boolean> = computed(() => {
-    const postForm: XxxPostType | undefined = this.$postForm_();
-    const selectedPost: XxxPostType | undefined = this.$selectedPost_();
+  readonly $selectIsSaveButtonDisabled: Signal<boolean> = computed(() => {
+    const postForm: XxxPostType | undefined = this.$selectPostForm();
+    const selectedPost: XxxPostType | undefined = this.$selectSelectedPost();
     const isPostFormEqual: boolean = JSON.stringify(selectedPost) === JSON.stringify(postForm);
-    return this.$isPostUpdating_() || (!this.$isPostsLoaded_()) || (this.$selectedPost_() === undefined) || (postForm === undefined) || isPostFormEqual;
+    return this.$selectIsPostUpdating() || (!this.$selectIsPostsLoaded()) || (this.$selectSelectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
   });
 
 // Reducers
@@ -141,7 +141,7 @@ export class XxxPostStore {
   }
 
   private selectPostReducer(postId: number): void {
-    // make sure post exists
+    // make sure the post exists
     if (this.$postState().posts.some(item => item.id === postId)) {
       this.$postState.update(state =>
         ({
@@ -192,7 +192,7 @@ export class XxxPostStore {
 
   // Effects
   private getPostsEffect(): void {
-    const userId: number | undefined = this.userStore.$selectedUserId_();
+    const userId: number | undefined = this.userStore.$selectSelectedUserId();
     if (userId === undefined) {
       return;
     }
@@ -223,14 +223,14 @@ export class XxxPostStore {
   }
 
   private showPostsEffect(): void {
-    if (!this.$isPostsLoaded_()) {
+    if (!this.$selectIsPostsLoaded()) {
       this.getPostsAction();
     }
   }
 
   private updatePostEffect(): void {
     this.loadingService.loadingOn();
-    const post: XxxPostType | undefined = this.$postForm_();
+    const post: XxxPostType | undefined = this.$selectPostForm();
     if (post === undefined) {
       this.updatePostErrorAction(undefined);
       return;

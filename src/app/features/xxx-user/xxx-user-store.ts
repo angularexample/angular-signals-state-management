@@ -52,17 +52,17 @@ export class XxxUserStore {
   }
 
   // Selectors
-  readonly $isNoSelectedUser_: Signal<boolean> = computed(() => this.$selectedUserId_() === undefined);
+  readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
 
-  readonly $isUsersEmpty_: Signal<boolean> = computed(() => !this.$userState().isUsersLoading && this.$userState().users.length === 0);
+  readonly $selectIsUsersEmpty: Signal<boolean> = computed(() => !this.$userState().isUsersLoading && this.$userState().users.length === 0);
 
-  readonly $isUsersLoaded_: Signal<boolean> = computed(() => this.$userState().users.length > 0);
+  readonly $selectIsUsersLoaded: Signal<boolean> = computed(() => this.$userState().users.length > 0);
 
-  readonly $isUsersLoading_: Signal<boolean> = computed(() => this.$userState().isUsersLoading);
+  readonly $selectIsUsersLoading: Signal<boolean> = computed(() => this.$userState().isUsersLoading);
 
-  readonly $selectedUserId_: Signal<number | undefined> = computed(() => this.$userState().selectedUserId);
+  readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$userState().selectedUserId);
 
-  readonly $users_: Signal<XxxUserType[]> = computed(() => this.$userState().users);
+  readonly $selectUsers: Signal<XxxUserType[]> = computed(() => this.$userState().users);
 
   // Reducers
   private getUsersReducer(): void {
@@ -138,7 +138,7 @@ export class XxxUserStore {
   }
 
   private showUsersEffect(): void {
-    if (!this.$isUsersLoaded_()) {
+    if (!this.$selectIsUsersLoaded()) {
       this.getUsersAction();
     }
   }

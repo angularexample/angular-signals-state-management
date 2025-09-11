@@ -1,15 +1,15 @@
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from "@angular/core";
+import { catchError, of } from 'rxjs';
+import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   XxxContentApi,
   xxxContentInitialState,
   XxxContentState,
   XxxContentStatus,
   XxxContentType
-} from "./xxx-content-types";
-import { catchError, of } from "rxjs";
-import { XxxContentData } from "./xxx-content-data";
-import { HttpErrorResponse } from "@angular/common/http";
-import { XxxHttpUtilities } from "../xxx-utilities/xxx-http-utilities";
+} from './xxx-content-types';
+import { XxxContentData } from './xxx-content-data';
+import { XxxHttpUtilities } from '../xxx-utilities/xxx-http-utilities';
 
 /**
  * XxxContentStore is the feature state for all content.

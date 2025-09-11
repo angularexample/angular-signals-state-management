@@ -7,11 +7,11 @@ import { XxxUserStore } from "./xxx-user-store";
 })
 export class XxxUserFacade {
   private userStore: XxxUserStore = inject(XxxUserStore);
-  readonly $isUsersEmpty: Signal<boolean> = this.userStore.$isUsersEmpty_;
-  readonly $isUsersLoaded: Signal<boolean> = this.userStore.$isUsersLoaded_;
-  readonly $isUsersLoading: Signal<boolean> = this.userStore.$isUsersLoading_;
-  readonly $selectedUserId: Signal<number | undefined> = this.userStore.$selectedUserId_;
-  readonly $users: Signal<XxxUserType[]> = this.userStore.$users_;
+  readonly $isUsersEmpty: Signal<boolean> = this.userStore.$selectIsUsersEmpty;
+  readonly $isUsersLoaded: Signal<boolean> = this.userStore.$selectIsUsersLoaded;
+  readonly $isUsersLoading: Signal<boolean> = this.userStore.$selectIsUsersLoading;
+  readonly $selectedUserId: Signal<number | undefined> = this.userStore.$selectSelectedUserId;
+  readonly $users: Signal<XxxUserType[]> = this.userStore.$selectUsers;
 
   showUsers(): void {
     this.userStore.showUsersAction();

@@ -4,7 +4,6 @@ import { XxxContent } from '../../core/xxx-content/xxx-content';
 import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
 import { XxxPostType } from './xxx-post-types';
 import { XxxPostFacade } from './xxx-post-facade';
-import { XxxUserFacade } from '../xxx-user/xxx-user-facade';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,14 +18,13 @@ export class XxxPost {
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
   protected readonly $content: Signal<XxxContentType | undefined> = this.contentFacade.$content(this.contentKey);
   private postFacade: XxxPostFacade = inject(XxxPostFacade);
-  private userFacade: XxxUserFacade = inject(XxxUserFacade);
-  protected readonly $isNoSelectedUser: Signal<boolean> = this.userFacade.$isNoSelectedUser;
+  protected readonly $isNoSelectedUser: Signal<boolean> = this.postFacade.$isNoSelectedUser;
   protected readonly $isPostsEmpty: Signal<boolean> = this.postFacade.$isPostsEmpty;
   protected readonly $isPostsLoaded: Signal<boolean> = this.postFacade.$isPostsLoaded;
   protected readonly $isPostsLoading: Signal<boolean> = this.postFacade.$isPostsLoading;
   protected readonly $posts: Signal<XxxPostType[]> = this.postFacade.$posts;
   protected readonly $selectedPostId: Signal<number | undefined> = this.postFacade.$selectedPostId;
-  protected readonly $selectedUserName: Signal<string> = this.userFacade.$selectedUserName;
+  protected readonly $selectedUserId: Signal<number | undefined> = this.postFacade.$selectedUserId;
 
   constructor() {
     this.postFacade.showPosts();

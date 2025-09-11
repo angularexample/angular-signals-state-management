@@ -68,13 +68,6 @@ export class XxxUserStore {
 
   readonly $selectIsUsersEmpty: Signal<boolean> = computed(() => this.$selectIsUsersLoaded() && this.$selectUsers().length === 0);
 
-  private readonly $selectSelectedUser: Signal<XxxUserType | undefined> = computed(() =>
-    this.$selectUsers().find((user: XxxUserType | undefined) =>
-      user?.id === this.$selectSelectedUserId()));
-
-  readonly $selectSelectedUserName: Signal<string> = computed(() =>
-    this.$selectSelectedUser() ? `${this.$selectSelectedUser()?.firstName} ${this.$selectSelectedUser()?.lastName}` : '');
-
   // Reducers
   // A reducer is a function that takes the current state and an action and returns a new state.
   // It is used to update the state based on the action.

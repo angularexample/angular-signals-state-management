@@ -83,10 +83,11 @@ export class XxxPostStore {
 
   readonly $selectIsPostUpdating: Signal<boolean> = computed(() => this.$postState().isPostUpdating);
 
-
   readonly $selectSelectedPostId: Signal<number | undefined> = computed(() => this.$postState().selectedPostId);
 
   readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$postState().selectedUserId);
+
+  readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
 
   private readonly $selectIsUserChanged: Signal<boolean> = computed(() => this.$selectSelectedUserId() !== this.userFacade.$selectedUserId());
 
@@ -164,13 +165,14 @@ export class XxxPostStore {
     );
   }
 
+  // Use signal set instead of update when setting and not updating the state.
   private showPostsReducer(): void {
     if (this.$selectIsUserChanged()) {
-      this.$postState.update(state =>
-        ({
+      this.$postState.set(
+        {
           ...xxxPostInitialState,
           selectedUserId: this.userFacade.$selectedUserId()
-        })
+        }
       );
     }
   }

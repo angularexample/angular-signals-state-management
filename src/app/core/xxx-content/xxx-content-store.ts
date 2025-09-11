@@ -45,7 +45,6 @@ export class XxxContentStore {
   }
 
   showContentAction(key: string): void {
-    console.log('~showContentAction', key);
     this.showContentEffect(key);
   }
 
@@ -211,7 +210,6 @@ export class XxxContentStore {
   private showContentEffect(key: string): void {
     // Check to see if content already exists
     // If content is not loaded, then load it
-    console.log('~showContentEffect', key);
     if (!this.$selectIsContentLoaded(key)()) {
       this.getContentAction(key);
     }

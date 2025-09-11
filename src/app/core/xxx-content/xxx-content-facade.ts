@@ -19,7 +19,6 @@ export class XxxContentFacade {
    * @param key the key to the content for a given page
    */
   showContent(key: string): void {
-    console.log(`~XxxContentFacade.showContent: ${key}`);
     this.contentStore.showContentAction(key);
   }
 }

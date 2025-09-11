@@ -1,13 +1,13 @@
-import { catchError, of } from "rxjs";
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { XxxAlert } from "../../core/xxx-alert/xxx-alert";
-import { XxxHttpUtilities } from "../../core/xxx-utilities/xxx-http-utilities";
-import { XxxLoadingService } from "../../core/xxx-loading/xxx-loading-service";
-import { XxxPostType, xxxPostInitialState, XxxPostState } from "./xxx-post-types";
-import { XxxPostData } from "./xxx-post-data"
-import { XxxUserStore } from "../xxx-user/xxx-user-store";
+import { catchError, of } from 'rxjs';
+import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { XxxAlert } from '../../core/xxx-alert/xxx-alert';
+import { XxxHttpUtilities } from '../../core/xxx-utilities/xxx-http-utilities';
+import { XxxLoadingService } from '../../core/xxx-loading/xxx-loading-service';
+import { xxxPostInitialState, XxxPostState, XxxPostType } from './xxx-post-types';
+import { XxxPostData } from './xxx-post-data'
+import { XxxUserFacade } from '../xxx-user/xxx-user-facade';
 
 /**
  * XxxPostStore is the feature state for the post page.
@@ -22,14 +22,12 @@ export class XxxPostStore {
   private loadingService: XxxLoadingService = inject(XxxLoadingService);
   private postDataService: XxxPostData = inject(XxxPostData);
   private router: Router = inject(Router);
-  private userStore: XxxUserStore = inject(XxxUserStore);
+  private userFacade: XxxUserFacade = inject(XxxUserFacade);
 
   // State
-  // Where we store all the properties needed to support the view
   private $postState: WritableSignal<XxxPostState> = signal<XxxPostState>(xxxPostInitialState);
 
   // Actions
-  // In this design actions are methods that trigger reducers and effects
   private getPostsAction(): void {
     this.getPostsReducer();
     this.getPostsEffect();
@@ -55,6 +53,7 @@ export class XxxPostStore {
   }
 
   showPostsAction(): void {
+    this.showPostsReducer();
     this.showPostsEffect();
   }
 
@@ -73,11 +72,8 @@ export class XxxPostStore {
     this.updatePostSuccessEffect();
   }
 
-
   // Selectors
   readonly $selectIsNoSelectedPost: Signal<boolean> = computed(() => this.$postState().selectedPostId === undefined);
-
-  readonly $selectIsNoSelectedUser: Signal<boolean> = this.userStore.$selectIsNoSelectedUser;
 
   readonly $selectIsPostsEmpty: Signal<boolean> = computed(() => !this.$postState().isPostsLoading && this.$postState().posts.length === 0);
 
@@ -87,7 +83,12 @@ export class XxxPostStore {
 
   readonly $selectIsPostUpdating: Signal<boolean> = computed(() => this.$postState().isPostUpdating);
 
+
   readonly $selectSelectedPostId: Signal<number | undefined> = computed(() => this.$postState().selectedPostId);
+
+  readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$postState().selectedUserId);
+
+  private readonly $selectIsUserChanged: Signal<boolean> = computed(() => this.$selectSelectedUserId() !== this.userFacade.$selectedUserId());
 
   private readonly $selectPostForm: Signal<XxxPostType | undefined> = computed(() => this.$postState().postForm);
 
@@ -118,7 +119,7 @@ export class XxxPostStore {
         isLoading: true,
         Posts: []
       })
-    )
+    );
   }
 
   private getPostsErrorReducer(): void {
@@ -127,7 +128,7 @@ export class XxxPostStore {
         ...state,
         isLoading: false
       })
-    )
+    );
   }
 
   private getPostsSuccessReducer(posts: XxxPostType[]): void {
@@ -137,7 +138,7 @@ export class XxxPostStore {
         isLoading: false,
         posts
       })
-    )
+    );
   }
 
   private selectPostReducer(postId: number): void {
@@ -148,7 +149,7 @@ export class XxxPostStore {
           ...state,
           selectedPostId: postId
         })
-      )
+      );
     }
   }
 
@@ -160,7 +161,18 @@ export class XxxPostStore {
         ...state,
         postForm
       })
-    )
+    );
+  }
+
+  private showPostsReducer(): void {
+    if (this.$selectIsUserChanged()) {
+      this.$postState.update(state =>
+        ({
+          ...xxxPostInitialState,
+          selectedUserId: this.userFacade.$selectedUserId()
+        })
+      );
+    }
   }
 
   private updatePostReducer(): void {
@@ -169,7 +181,7 @@ export class XxxPostStore {
         ...state,
         isPostUpdating: true
       })
-    )
+    );
   }
 
   private updatePostErrorReducer(): void {
@@ -178,7 +190,7 @@ export class XxxPostStore {
         ...state,
         isPostUpdating: false
       })
-    )
+    );
   }
 
   private updatePostSuccessReducer(): void {
@@ -187,12 +199,12 @@ export class XxxPostStore {
         ...state,
         isPostUpdating: false
       })
-    )
+    );
   }
 
   // Effects
   private getPostsEffect(): void {
-    const userId: number | undefined = this.userStore.$selectSelectedUserId();
+    const userId: number | undefined = this.userFacade.$selectedUserId();
     if (userId === undefined) {
       return;
     }

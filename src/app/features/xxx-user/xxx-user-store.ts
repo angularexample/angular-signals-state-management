@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { XxxAlert } from "../../core/xxx-alert/xxx-alert";
 import { XxxHttpUtilities } from "../../core/xxx-utilities/xxx-http-utilities";
 import { XxxLoadingService } from "../../core/xxx-loading/xxx-loading-service";
-import { XxxUserType, XxxUserApiResponse, xxxUserInitialState, XxxUserState } from "./xxx-user-types";
+import { XxxUserApiResponse, xxxUserInitialState, XxxUserState, XxxUserType } from "./xxx-user-types";
 import { XxxUserData } from "./xxx-user-data"
 
 /**
@@ -23,19 +23,11 @@ export class XxxUserStore {
   private userDataService: XxxUserData = inject(XxxUserData);
 
   // State
-  // Where we store all the properties needed to support the view
+  // It is a single data object to store all the properties needed to support the view.
   private $userState: WritableSignal<XxxUserState> = signal<XxxUserState>(xxxUserInitialState);
 
   // Actions
-  selectUserAction(userId: number): void {
-    this.selectUserReducer(userId);
-    this.selectUserEffect();
-  }
-
-  showUsersAction(): void {
-    this.showUsersEffect();
-  }
-
+  // An action is what triggers a change in the state or runs an effect.
   private getUsersAction(): void {
     this.getUsersReducer();
     this.getUsersEffect();
@@ -51,20 +43,42 @@ export class XxxUserStore {
     this.getUsersSuccessEffect();
   }
 
+  setSelectedUserAction(userId: number): void {
+    this.selectUserReducer(userId);
+    this.selectUserEffect();
+  }
+
+  showUsersAction(): void {
+    this.showUsersEffect();
+  }
+
   // Selectors
-  readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
-
-  readonly $selectIsUsersEmpty: Signal<boolean> = computed(() => !this.$userState().isUsersLoading && this.$userState().users.length === 0);
-
-  readonly $selectIsUsersLoaded: Signal<boolean> = computed(() => this.$userState().users.length > 0);
-
-  readonly $selectIsUsersLoading: Signal<boolean> = computed(() => this.$userState().isUsersLoading);
-
+  // A selector is used to read any data from the state.
+  // In a Signal-based state, it is a function that returns a signal.
+  // By design, it is the only way to read the state.
   readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$userState().selectedUserId);
+
+  readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
 
   readonly $selectUsers: Signal<XxxUserType[]> = computed(() => this.$userState().users);
 
+  readonly $selectIsUsersLoading: Signal<boolean> = computed(() => this.$userState().isUsersLoading);
+
+  readonly $selectIsUsersLoaded: Signal<boolean> = computed(() => !this.$selectIsUsersLoading() && this.$selectUsers().length > 0);
+
+  readonly $selectIsUsersEmpty: Signal<boolean> = computed(() => this.$selectIsUsersLoaded() && this.$selectUsers().length === 0);
+
+  private readonly $selectSelectedUser: Signal<XxxUserType | undefined> = computed(() =>
+    this.$selectUsers().find((user: XxxUserType | undefined) =>
+      user?.id === this.$selectSelectedUserId()));
+
+  readonly $selectSelectedUserName: Signal<string> = computed(() =>
+    this.$selectSelectedUser() ? `${this.$selectSelectedUser()?.firstName} ${this.$selectSelectedUser()?.lastName}` : '');
+
   // Reducers
+  // A reducer is a function that takes the current state and an action and returns a new state.
+  // It is used to update the state based on the action.
+  // By design, it is the only way to change the state.
   private getUsersReducer(): void {
     this.$userState.update(state =>
       ({
@@ -104,6 +118,8 @@ export class XxxUserStore {
   }
 
   // Effects
+  // An effect is where we run a service to access data.
+  // It is also used to navigate to a new page or to display a dialog.
   private getUsersEffect(): void {
     this.loadingService.loadingOn();
     this.userDataService.getUsers().pipe(

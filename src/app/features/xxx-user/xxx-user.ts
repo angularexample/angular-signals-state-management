@@ -29,6 +29,6 @@ export class XxxUser {
   }
 
   protected rowClick(user: XxxUserType): void {
-    this.userFacade.selectUser(user.id);
+    this.userFacade.setSelectedUser(user.id);
   }
 }

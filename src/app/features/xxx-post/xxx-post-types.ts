@@ -24,4 +24,5 @@ export interface XxxPostState {
   postForm?: XxxPostType;
   posts: XxxPostType[];
   selectedPostId?: number;
+  selectedUserId?: number;
 }

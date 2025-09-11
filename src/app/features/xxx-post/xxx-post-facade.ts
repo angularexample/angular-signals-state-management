@@ -1,6 +1,6 @@
 import { inject, Injectable, Signal } from '@angular/core';
-import { XxxPostType } from "./xxx-post-types";
 import { XxxPostStore } from './xxx-post-store';
+import { XxxPostType } from './xxx-post-types';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,6 @@ import { XxxPostStore } from './xxx-post-store';
 export class XxxPostFacade {
   private postStore: XxxPostStore = inject(XxxPostStore);
   readonly $isNoSelectedPost: Signal<boolean> = this.postStore.$selectIsNoSelectedPost;
-  readonly $isNoSelectedUser: Signal<boolean> = this.postStore.$selectIsNoSelectedUser;
   readonly $isPostsEmpty: Signal<boolean> = this.postStore.$selectIsPostsEmpty;
   readonly $isPostsLoaded: Signal<boolean> = this.postStore.$selectIsPostsLoaded;
   readonly $isPostsLoading: Signal<boolean> = this.postStore.$selectIsPostsLoading;

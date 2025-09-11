@@ -16,6 +16,7 @@
     @if ($isPostsLoaded()) {
       <section>
         <h3>{{ content?.contentModel?.bodyText }}</h3>
+        <p>User Name: {{$selectedUserName()}}</p>
         <table class="xxx-table">
           <tr>
             <th class="xxx-table-cell-header">Id</th>

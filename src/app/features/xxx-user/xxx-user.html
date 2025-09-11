@@ -8,8 +8,7 @@
       <p>Loading...</p>
     } @else if ($isUsersEmpty()) {
       <p>None found.</p>
-    }
-    @if ($isUsersLoaded()) {
+    } @else if ($isUsersLoaded()) {
       <section>
         <h3>{{ content?.contentModel?.bodyText }}</h3>
         <table class="xxx-table">

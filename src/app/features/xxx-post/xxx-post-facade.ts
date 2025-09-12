@@ -19,7 +19,7 @@ export class XxxPostFacade {
   readonly $selectedUserId: Signal<number | undefined> = this.postStore.$selectSelectedUserId;
 
   selectPost(postId: number): void {
-    this.postStore.selectPostAction(postId);
+    this.postStore.setSelectedPostAction(postId);
   }
 
   setPostForm(post: XxxPostType): void {

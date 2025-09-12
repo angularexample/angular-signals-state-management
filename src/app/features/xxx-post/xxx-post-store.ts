@@ -43,17 +43,21 @@ export class XxxPostStore {
     this.getPostsSuccessEffect();
   }
 
-  selectPostAction(postId: number): void {
-    this.selectPostReducer(postId);
-    this.selectPostEffect();
-  }
-
   setPostFormAction(post: XxxPostType): void {
     this.setPostFormReducer(post);
   }
 
+  setSelectedPostAction(postId: number): void {
+    this.setSelectedPostReducer(postId);
+    this.setSelectedPostEffect();
+  }
+
+  setSelectedUserAction(userId: number): void {
+    this.setSelectedUserReducer(userId);
+    this.setSelectedUserEffect();
+  }
+
   showPostsAction(): void {
-    this.showPostsReducer();
     this.showPostsEffect();
   }
 
@@ -88,8 +92,6 @@ export class XxxPostStore {
   readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$postState().selectedUserId);
 
   readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
-
-  private readonly $selectIsUserChanged: Signal<boolean> = computed(() => this.$selectSelectedUserId() !== this.userFacade.$selectedUserId());
 
   private readonly $selectPostForm: Signal<XxxPostType | undefined> = computed(() => this.$postState().postForm);
 
@@ -142,7 +144,7 @@ export class XxxPostStore {
     );
   }
 
-  private selectPostReducer(postId: number): void {
+  private setSelectedPostReducer(postId: number): void {
     // make sure the post exists
     if (this.$postState().posts.some(item => item.id === postId)) {
       this.$postState.update(state =>
@@ -165,16 +167,14 @@ export class XxxPostStore {
     );
   }
 
-  // Use signal set instead of update when setting and not updating the state.
-  private showPostsReducer(): void {
-    if (this.$selectIsUserChanged()) {
-      this.$postState.set(
-        {
-          ...xxxPostInitialState,
-          selectedUserId: this.userFacade.$selectedUserId()
-        }
-      );
-    }
+  private setSelectedUserReducer(userId: number) {
+    // Use signal set instead of update when setting and not updating the state.
+    this.$postState.set(
+      ({
+        ...xxxPostInitialState,
+        selectedUserId: userId,
+      })
+    );
   }
 
   private updatePostReducer(): void {
@@ -232,13 +232,29 @@ export class XxxPostStore {
     this.loadingService.loadingOff();
   }
 
-  private selectPostEffect(): void {
+  private setSelectedPostEffect(): void {
     void this.router.navigateByUrl('/post/edit')
   }
 
+  private setSelectedUserEffect() {
+    this.getPostsAction()
+  }
+
+  // Logic to show user posts
+  // 1. If there is no selected user, then do nothing
+  // 2. If the selected user is different from the user id in the Post state,
+  //    then set the user id in the Post state to the selected user id
+  // 3. If posts are not loaded and the user id in the Post state is the same as the user id,
+  //    then get the user posts
   private showPostsEffect(): void {
-    if (!this.$selectIsPostsLoaded()) {
-      this.getPostsAction();
+    const selectedUserId: number | undefined = this.userFacade.$selectedUserId();
+    const postSelectedUserId: number | undefined = this.$selectSelectedUserId();
+    if (selectedUserId !== undefined) {
+      if (selectedUserId !== postSelectedUserId) {
+        this.setSelectedUserAction(selectedUserId);
+      } else if (!this.$selectIsPostsLoaded()) {
+        this.getPostsAction();
+      }
     }
   }
 

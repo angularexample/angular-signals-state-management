@@ -71,8 +71,8 @@ export class XxxPostStore {
     this.updatePostErrorEffect(err);
   }
 
-  private updatePostSuccessAction(): void {
-    this.updatePostSuccessReducer();
+  private updatePostSuccessAction(post: XxxPostType): void {
+    this.updatePostSuccessReducer(post);
     this.updatePostSuccessEffect();
   }
 
@@ -195,12 +195,19 @@ export class XxxPostStore {
     );
   }
 
-  private updatePostSuccessReducer(): void {
-    this.$postState.update(state =>
-      ({
-        ...state,
-        isPostUpdating: false
-      })
+  private updatePostSuccessReducer(post: XxxPostType): void {
+    this.$postState.update(state => {
+        // remove the old post, add the new one, sort by id
+        let posts = state.posts.filter(item => item.id !== post.id);
+        const updatedPost: XxxPostType = {...post};
+        posts.push(updatedPost);
+        posts.sort((a: XxxPostType, b: XxxPostType) => a.id - b.id);
+        return {
+          ...state,
+          isPostUpdating: false,
+          posts
+        };
+      }
     );
   }
 
@@ -272,9 +279,9 @@ export class XxxPostStore {
           this.updatePostErrorAction(err);
           return of({});
         })
-      ).subscribe(() => {
-        if (!isError) {
-          this.updatePostSuccessAction()
+      ).subscribe((postResponse: XxxPostType | {}) => {
+        if (!isError && Object.keys(postResponse).length > 0) {
+          this.updatePostSuccessAction(postResponse as XxxPostType);
         }
       })
     }

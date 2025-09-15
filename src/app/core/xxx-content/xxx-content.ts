@@ -9,9 +9,7 @@ import { XxxContentFacade } from './xxx-content-facade';
 export class XxxContent implements OnInit {
   @Input({required: true}) contentKey!: string;
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly $contentErrorMessage: Signal<string | undefined> = this.contentFacade.$contentErrorMessage(this.contentKey);
   protected readonly $isContentEmpty: Signal<boolean> = this.contentFacade.$isContentEmpty(this.contentKey);
-  protected readonly $isContentError: Signal<boolean> = this.contentFacade.$isContentError(this.contentKey);
   protected readonly $isContentLoading: Signal<boolean> = this.contentFacade.$isContentLoading(this.contentKey);
 
   ngOnInit(): void {

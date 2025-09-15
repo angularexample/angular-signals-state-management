@@ -1,6 +1,5 @@
 export interface XxxContentType {
   contentModel?: XxxContentModel;
-  errorMessage?: string;
   key: string;
   status: XxxContentStatus;
 }

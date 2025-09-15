@@ -1,9 +1,7 @@
 import { catchError, of } from 'rxjs';
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { XxxAlert } from '../../core/xxx-alert/xxx-alert';
-import { XxxHttpUtilities } from '../../core/xxx-utilities/xxx-http-utilities';
 import { XxxLoadingService } from '../../core/xxx-loading/xxx-loading-service';
 import { xxxPostInitialState, XxxPostState, XxxPostType } from './xxx-post-types';
 import { XxxPostData } from './xxx-post-data'
@@ -33,9 +31,9 @@ export class XxxPostStore {
     this.getPostsEffect();
   }
 
-  private getPostsErrorAction(err: HttpErrorResponse): void {
+  private getPostsErrorAction(userId: number): void {
     this.getPostsErrorReducer();
-    this.getPostsErrorEffect(err);
+    this.getPostsErrorEffect(userId);
   }
 
   private getPostsSuccessAction(posts: XxxPostType[]): void {
@@ -66,9 +64,9 @@ export class XxxPostStore {
     this.updatePostEffect();
   }
 
-  private updatePostErrorAction(err: HttpErrorResponse | undefined): void {
+  private updatePostErrorAction(postId: number): void {
     this.updatePostErrorReducer();
-    this.updatePostErrorEffect(err);
+    this.updatePostErrorEffect(postId);
   }
 
   private updatePostSuccessAction(post: XxxPostType): void {
@@ -218,21 +216,24 @@ export class XxxPostStore {
       return;
     }
     this.loadingService.loadingOn();
+    let isError = false;
     this.postDataService.getPosts(userId).pipe(
-      catchError((err: HttpErrorResponse) => {
-        this.getPostsErrorAction(err);
+      catchError(() => {
+        isError = true;
+        this.getPostsErrorAction(userId);
         return of([]);
       })
     ).subscribe((response: unknown) => {
-      const posts: XxxPostType[] = response as XxxPostType[];
-      this.getPostsSuccessAction(posts);
+      if (!isError) {
+        const posts: XxxPostType[] = response as XxxPostType[];
+        this.getPostsSuccessAction(posts);
+      }
     })
   }
 
-  private getPostsErrorEffect(err: HttpErrorResponse): void {
+  private getPostsErrorEffect(userId: number): void {
     this.loadingService.loadingOff();
-    const errorMessage: string = XxxHttpUtilities.setErrorMessage(err);
-    this.alertService.showError(errorMessage);
+    this.alertService.showError('Error loading posts for user: ' + userId);
   }
 
   private getPostsSuccessEffect(): void {
@@ -269,14 +270,15 @@ export class XxxPostStore {
     this.loadingService.loadingOn();
     const post: XxxPostType | undefined = this.$selectPostForm();
     if (post === undefined) {
-      this.updatePostErrorAction(undefined);
+      //unexpected error, post should not be undefined
+      this.updatePostErrorAction(0);
       return;
     } else {
       let isError: boolean = false;
       this.postDataService.updatePost(post).pipe(
-        catchError((err: HttpErrorResponse) => {
+        catchError(() => {
           isError = true;
-          this.updatePostErrorAction(err);
+          this.updatePostErrorAction(post.id);
           return of({});
         })
       ).subscribe((postResponse: XxxPostType | {}) => {
@@ -287,13 +289,9 @@ export class XxxPostStore {
     }
   }
 
-  private updatePostErrorEffect(err: HttpErrorResponse | undefined): void {
+  private updatePostErrorEffect(postId: number): void {
     this.loadingService.loadingOff();
-    let errorMessage: string = 'Error occurred. Unable to update post.';
-    if (err) {
-      errorMessage = `${errorMessage} ${XxxHttpUtilities.setErrorMessage(err)}`;
-    }
-    this.alertService.showError(errorMessage);
+    this.alertService.showError('Error occurred. Unable to update post: ' + postId);
   }
 
   private updatePostSuccessEffect(): void {

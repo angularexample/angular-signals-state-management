@@ -1,9 +1,7 @@
 import { catchError, of } from 'rxjs';
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { XxxAlert } from '../../core/xxx-alert/xxx-alert';
-import { XxxHttpUtilities } from '../../core/xxx-utilities/xxx-http-utilities';
 import { XxxLoadingService } from '../../core/xxx-loading/xxx-loading-service';
 import { XxxUserApiResponse, xxxUserInitialState, XxxUserState, XxxUserType } from './xxx-user-types';
 import { XxxUserData } from './xxx-user-data'
@@ -33,9 +31,9 @@ export class XxxUserStore {
     this.getUsersEffect();
   }
 
-  private getUsersErrorAction(err: HttpErrorResponse): void {
+  private getUsersErrorAction(): void {
     this.getUsersErrorReducer();
-    this.getUsersErrorEffect(err);
+    this.getUsersErrorEffect();
   }
 
   private getUsersSuccessAction(users: XxxUserType[]): void {
@@ -115,9 +113,11 @@ export class XxxUserStore {
   // It is also used to navigate to a new page or to display a dialog.
   private getUsersEffect(): void {
     this.loadingService.loadingOn();
+    let isError: boolean = false;
     this.userDataService.getUsers().pipe(
-      catchError((err: HttpErrorResponse) => {
-        this.getUsersErrorAction(err);
+      catchError(() => {
+        isError = true;
+        this.getUsersErrorAction();
         const emptyResponse: XxxUserApiResponse = {
           limit: 0,
           skip: 0,
@@ -127,15 +127,16 @@ export class XxxUserStore {
         return of(emptyResponse);
       })
     ).subscribe((response: unknown): void => {
-      const apiResponse: XxxUserApiResponse = response as XxxUserApiResponse;
-      this.getUsersSuccessAction(apiResponse.users);
+      if (!isError) {
+        const apiResponse: XxxUserApiResponse = response as XxxUserApiResponse;
+        this.getUsersSuccessAction(apiResponse.users);
+      }
     })
   }
 
-  private getUsersErrorEffect(err: HttpErrorResponse): void {
+  private getUsersErrorEffect(): void {
     this.loadingService.loadingOff();
-    const errorMessage: string = XxxHttpUtilities.setErrorMessage(err);
-    this.alertService.showError(errorMessage);
+    this.alertService.showError('Error loading users');
   }
 
   private getUsersSuccessEffect(): void {

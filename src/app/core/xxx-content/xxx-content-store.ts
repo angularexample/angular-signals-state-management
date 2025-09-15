@@ -1,6 +1,6 @@
 import { catchError, of } from 'rxjs';
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { XxxAlert } from "../xxx-alert/xxx-alert";
 import {
   XxxContentApi,
   xxxContentInitialState,
@@ -9,7 +9,6 @@ import {
   XxxContentType
 } from './xxx-content-types';
 import { XxxContentData } from './xxx-content-data';
-import { XxxHttpUtilities } from '../xxx-utilities/xxx-http-utilities';
 
 /**
  * XxxContentStore is the feature state for all content.
@@ -20,6 +19,7 @@ import { XxxHttpUtilities } from '../xxx-utilities/xxx-http-utilities';
   providedIn: 'root'
 })
 export class XxxContentStore {
+  private alertService: XxxAlert = inject(XxxAlert);
   private contentService: XxxContentData = inject(XxxContentData);
 
   // State
@@ -36,8 +36,9 @@ export class XxxContentStore {
     this.getContentEffect(key);
   }
 
-  private getContentErrorAction(key: string, err: HttpErrorResponse): void {
-    this.getContentErrorReducer(key, err);
+  private getContentErrorAction(key: string): void {
+    this.getContentErrorReducer(key);
+    this.getContentErrorEffect(key);
   }
 
   private getContentSuccessAction(response: XxxContentApi): void {
@@ -65,31 +66,11 @@ export class XxxContentStore {
     });
   }
 
-  $selectErrorMessage(key: string): Signal<string | undefined> {
-    return computed(() => {
-      const content: XxxContentType | undefined = this.$selectContent(key)();
-      if (content) {
-        return content?.errorMessage;
-      }
-      return undefined;
-    });
-  }
-
   $selectIsContentEmpty(key: string): Signal<boolean> {
     return computed(() => {
       const content: XxxContentType | undefined = this.$selectContent(key)();
       if (content) {
         return content?.status !== XxxContentStatus.ERROR && content?.status === XxxContentStatus.EMPTY;
-      }
-      return false;
-    })
-  }
-
-  $selectIsContentError(key: string): Signal<boolean> {
-    return computed(() => {
-      const content: XxxContentType | undefined = this.$selectContent(key)();
-      if (content) {
-        return content?.status === XxxContentStatus.ERROR;
       }
       return false;
     })
@@ -126,7 +107,6 @@ export class XxxContentStore {
     // Create a new content object
     const content: XxxContentType = {
       contentModel: undefined,
-      errorMessage: undefined,
       status: XxxContentStatus.LOADING,
       key
     };
@@ -140,15 +120,12 @@ export class XxxContentStore {
     );
   }
 
-  private getContentErrorReducer(key: string, err: HttpErrorResponse): void {
-    // Set the error message
-    const errorMessage: string = `Key '${key}'. ${XxxHttpUtilities.setErrorMessage(err)}`;
+  private getContentErrorReducer(key: string): void {
     // Remove any existing content, also replaces the old array for immutability
     const contents: XxxContentType[] = this.$selectContents().filter(item => item.key !== key);
     // Create a new content object
     const content: XxxContentType = {
       contentModel: undefined,
-      errorMessage,
       status: XxxContentStatus.ERROR,
       key
     };
@@ -190,9 +167,9 @@ export class XxxContentStore {
     let isError = false;
     this.contentService.getContent(key)
       .pipe(
-        catchError((err: HttpErrorResponse) => {
+        catchError(() => {
           isError = true;
-          this.getContentErrorAction(key, err);
+          this.getContentErrorAction(key);
           // return an empty response object
           return of({
             contentModel: {},
@@ -213,5 +190,9 @@ export class XxxContentStore {
     if (!this.$selectIsContentLoaded(key)()) {
       this.getContentAction(key);
     }
+  }
+
+  private getContentErrorEffect(key: string) {
+    this.alertService.showError('Error loading content for ' + key);
   }
 }

@@ -26,11 +26,11 @@ export class XxxPostEdit {
     userId: new FormControl(xxxPostFormDataInitial.userId)
   });
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly $content: Signal<XxxContentType | undefined> = this.contentFacade.$content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
   private postFacade: XxxPostFacade = inject(XxxPostFacade);
-  protected readonly $isNoSelectedPost: Signal<boolean> = this.postFacade.$isNoSelectedPost;
-  protected readonly $isSaveButtonDisabled: Signal<boolean> = this.postFacade.$isSaveButtonDisabled;
-  protected readonly $selectedPost: Signal<XxxPostType | undefined> = this.postFacade.$selectedPost;
+  protected readonly isNoSelectedPost: Signal<boolean> = this.postFacade.isNoSelectedPost;
+  protected readonly isSaveButtonDisabled: Signal<boolean> = this.postFacade.isSaveButtonDisabled;
+  protected readonly selectedPost: Signal<XxxPostType | undefined> = this.postFacade.selectedPost;
 
   constructor() {
     this.loadFormData();
@@ -42,7 +42,7 @@ export class XxxPostEdit {
   }
 
   private loadFormData(): void {
-    const post: XxxPostType | undefined = this.$selectedPost();
+    const post: XxxPostType | undefined = this.selectedPost();
     if (post !== undefined) {
       this.postForm.setValue(post);
     }

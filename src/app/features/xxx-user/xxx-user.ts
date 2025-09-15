@@ -16,13 +16,13 @@ import { XxxUserFacade } from './xxx-user-facade';
 export class XxxUser {
   protected readonly contentKey: string = 'user';
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly $content: Signal<XxxContentType | undefined> = this.contentFacade.$content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
   private userFacade: XxxUserFacade = inject(XxxUserFacade);
-  protected readonly $isUsersEmpty: Signal<boolean> = this.userFacade.$isUsersEmpty;
-  protected readonly $isUsersLoaded: Signal<boolean> = this.userFacade.$isUsersLoaded;
-  protected readonly $isUsersLoading: Signal<boolean> = this.userFacade.$isUsersLoading;
-  protected readonly $selectedUserId: Signal<number | undefined> = this.userFacade.$selectedUserId;
-  protected readonly $users: Signal<XxxUserType[]> = this.userFacade.$users;
+  protected readonly isUsersEmpty: Signal<boolean> = this.userFacade.isUsersEmpty;
+  protected readonly isUsersLoaded: Signal<boolean> = this.userFacade.isUsersLoaded;
+  protected readonly isUsersLoading: Signal<boolean> = this.userFacade.isUsersLoading;
+  protected readonly selectedUserId: Signal<number | undefined> = this.userFacade.selectedUserId;
+  protected readonly users: Signal<XxxUserType[]> = this.userFacade.users;
 
   constructor() {
     this.userFacade.showUsers();

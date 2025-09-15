@@ -22,7 +22,7 @@ export class XxxUserStore {
 
   // State
   // It is a single data object to store all the properties needed to support the view.
-  private $userState: WritableSignal<XxxUserState> = signal<XxxUserState>(xxxUserInitialState);
+  private userState: WritableSignal<XxxUserState> = signal<XxxUserState>(xxxUserInitialState);
 
   // Actions
   // An action is what triggers a change in the state or runs an effect.
@@ -54,24 +54,22 @@ export class XxxUserStore {
   // A selector is used to read any data from the state.
   // In a Signal-based state, it is a function that returns a signal.
   // By design, it is the only way to read the state.
-  readonly $selectSelectedUserId: Signal<number | undefined> = computed(() => this.$userState().selectedUserId);
+  readonly selectSelectedUserId: Signal<number | undefined> = computed(() => this.userState().selectedUserId);
 
-  readonly $selectIsNoSelectedUser: Signal<boolean> = computed(() => this.$selectSelectedUserId() === undefined);
+  readonly selectUsers: Signal<XxxUserType[]> = computed(() => this.userState().users);
 
-  readonly $selectUsers: Signal<XxxUserType[]> = computed(() => this.$userState().users);
+  readonly selectIsUsersLoading: Signal<boolean> = computed(() => this.userState().isUsersLoading);
 
-  readonly $selectIsUsersLoading: Signal<boolean> = computed(() => this.$userState().isUsersLoading);
+  readonly selectIsUsersLoaded: Signal<boolean> = computed(() => !this.selectIsUsersLoading() && this.selectUsers().length > 0);
 
-  readonly $selectIsUsersLoaded: Signal<boolean> = computed(() => !this.$selectIsUsersLoading() && this.$selectUsers().length > 0);
-
-  readonly $selectIsUsersEmpty: Signal<boolean> = computed(() => this.$selectIsUsersLoaded() && this.$selectUsers().length === 0);
+  readonly selectIsUsersEmpty: Signal<boolean> = computed(() => this.selectIsUsersLoaded() && this.selectUsers().length === 0);
 
   // Reducers
   // A reducer is a function that takes the current state and an action and returns a new state.
   // It is used to update the state based on the action.
   // By design, it is the only way to change the state.
   private getUsersReducer(): void {
-    this.$userState.update(state =>
+    this.userState.update(state =>
       ({
         ...state,
         isLoading: true,
@@ -81,7 +79,7 @@ export class XxxUserStore {
   }
 
   private getUsersErrorReducer(): void {
-    this.$userState.update(state =>
+    this.userState.update(state =>
       ({
         ...state,
         isLoading: false
@@ -90,7 +88,7 @@ export class XxxUserStore {
   }
 
   private getUsersSuccessReducer(users: XxxUserType[]): void {
-    this.$userState.update(state =>
+    this.userState.update(state =>
       ({
         ...state,
         isLoading: false,
@@ -100,7 +98,7 @@ export class XxxUserStore {
   }
 
   private selectUserReducer(userId: number): void {
-    this.$userState.update(state =>
+    this.userState.update(state =>
       ({
         ...state,
         selectedUserId: userId
@@ -148,7 +146,7 @@ export class XxxUserStore {
   }
 
   private showUsersEffect(): void {
-    if (!this.$selectIsUsersLoaded()) {
+    if (!this.selectIsUsersLoaded()) {
       this.getUsersAction();
     }
   }

@@ -22,15 +22,17 @@ export class XxxContentStore {
   private alertService: XxxAlert = inject(XxxAlert);
   private contentService: XxxContentData = inject(XxxContentData);
 
+
   // State
   // Where we store all the properties needed to support the view
-  private $contentState: WritableSignal<XxxContentState> = signal<XxxContentState>(xxxContentInitialState);
+  private contentState: WritableSignal<XxxContentState> = signal<XxxContentState>(xxxContentInitialState);
+
 
   // Actions
   // To trigger state changes which then change the view.
+  // Action methods run the reducer and effect
   // Action methods always run first the reducer and then the effect.
 
-  // Action methods run the reducer and effect
   private getContentAction(key: string): void {
     this.getContentReducer(key);
     this.getContentEffect(key);
@@ -53,22 +55,21 @@ export class XxxContentStore {
   // Selectors
   // Used to read current values from the state.
   // All selector names have the prefix 'select'
-  // If it returns a signal, then it also has the prefix '$'
 
-  private readonly $selectContents: Signal<XxxContentType[]> = computed(() =>
-    this.$contentState().contents
+  private readonly selectContents: Signal<XxxContentType[]> = computed(() =>
+    this.contentState().contents
   );
 
-  $selectContent(key: string): Signal<XxxContentType | undefined> {
+  selectContent(key: string): Signal<XxxContentType | undefined> {
     return computed(() => {
-      const contents: XxxContentType[] = this.$selectContents();
+      const contents: XxxContentType[] = this.selectContents();
       return contents.find(item => item.key === key);
     });
   }
 
-  $selectIsContentEmpty(key: string): Signal<boolean> {
+  selectIsContentEmpty(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.$selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContent(key)();
       if (content) {
         return content?.status !== XxxContentStatus.ERROR && content?.status === XxxContentStatus.EMPTY;
       }
@@ -76,9 +77,9 @@ export class XxxContentStore {
     })
   }
 
-  private $selectIsContentLoaded(key: string): Signal<boolean> {
+  private selectIsContentLoaded(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.$selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContent(key)();
       if (content) {
         return content?.status === XxxContentStatus.LOADED;
       }
@@ -86,9 +87,9 @@ export class XxxContentStore {
     })
   }
 
-  $selectIsContentLoading(key: string): Signal<boolean> {
+  selectIsContentLoading(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.$selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContent(key)();
       if (content) {
         return content?.status === XxxContentStatus.LOADING;
       }
@@ -103,7 +104,7 @@ export class XxxContentStore {
 
   private getContentReducer(key: string): void {
     // Remove any existing content, also replaces the old array for immutability
-    const contents: XxxContentType[] = this.$selectContents().filter(item => item.key !== key);
+    const contents: XxxContentType[] = this.selectContents().filter(item => item.key !== key);
     // Create a new content object
     const content: XxxContentType = {
       contentModel: undefined,
@@ -113,7 +114,7 @@ export class XxxContentStore {
     // Add the new content object
     contents.push(content);
     // Finally, update the state
-    this.$contentState.update(state => ({
+    this.contentState.update(state => ({
         ...state,
         contents
       })
@@ -122,7 +123,7 @@ export class XxxContentStore {
 
   private getContentErrorReducer(key: string): void {
     // Remove any existing content, also replaces the old array for immutability
-    const contents: XxxContentType[] = this.$selectContents().filter(item => item.key !== key);
+    const contents: XxxContentType[] = this.selectContents().filter(item => item.key !== key);
     // Create a new content object
     const content: XxxContentType = {
       contentModel: undefined,
@@ -132,7 +133,7 @@ export class XxxContentStore {
     // Add the new content object
     contents.push(content);
     // Finally, update the state
-    this.$contentState.update(state => ({
+    this.contentState.update(state => ({
         ...state,
         contents
       })
@@ -147,11 +148,11 @@ export class XxxContentStore {
       key: contentApi.key
     };
     // Remove any existing content, also replaces the old array for immutability
-    const contents: XxxContentType[] = this.$selectContents().filter(item => item.key !== content.key);
+    const contents: XxxContentType[] = this.selectContents().filter(item => item.key !== content.key);
     // Add the new content object
     contents.push(content);
     // Finally, update the state
-    this.$contentState.update(state => ({
+    this.contentState.update(state => ({
         ...state,
         contents
       })
@@ -187,7 +188,7 @@ export class XxxContentStore {
   private showContentEffect(key: string): void {
     // Check to see if content already exists
     // If content is not loaded, then load it
-    if (!this.$selectIsContentLoaded(key)()) {
+    if (!this.selectIsContentLoaded(key)()) {
       this.getContentAction(key);
     }
   }

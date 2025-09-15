@@ -16,15 +16,15 @@ import { XxxPostFacade } from './xxx-post-facade';
 export class XxxPost {
   protected readonly contentKey: string = 'post';
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly $content: Signal<XxxContentType | undefined> = this.contentFacade.$content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
   private postFacade: XxxPostFacade = inject(XxxPostFacade);
-  protected readonly $isNoSelectedUser: Signal<boolean> = this.postFacade.$isNoSelectedUser;
-  protected readonly $isPostsEmpty: Signal<boolean> = this.postFacade.$isPostsEmpty;
-  protected readonly $isPostsLoaded: Signal<boolean> = this.postFacade.$isPostsLoaded;
-  protected readonly $isPostsLoading: Signal<boolean> = this.postFacade.$isPostsLoading;
-  protected readonly $posts: Signal<XxxPostType[]> = this.postFacade.$posts;
-  protected readonly $selectedPostId: Signal<number | undefined> = this.postFacade.$selectedPostId;
-  protected readonly $selectedUserId: Signal<number | undefined> = this.postFacade.$selectedUserId;
+  protected readonly isNoSelectedUser: Signal<boolean> = this.postFacade.isNoSelectedUser;
+  protected readonly isPostsEmpty: Signal<boolean> = this.postFacade.isPostsEmpty;
+  protected readonly isPostsLoaded: Signal<boolean> = this.postFacade.isPostsLoaded;
+  protected readonly isPostsLoading: Signal<boolean> = this.postFacade.isPostsLoading;
+  protected readonly posts: Signal<XxxPostType[]> = this.postFacade.posts;
+  protected readonly selectedPostId: Signal<number | undefined> = this.postFacade.selectedPostId;
+  protected readonly selectedUserId: Signal<number | undefined> = this.postFacade.selectedUserId;
 
   constructor() {
     this.postFacade.showPosts();

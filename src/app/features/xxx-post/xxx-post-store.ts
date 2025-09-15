@@ -75,7 +75,8 @@ export class XxxPostStore {
   }
 
   // Selectors
-  readonly $selectIsNoSelectedPost: Signal<boolean> = computed(() => this.$postState().selectedPostId === undefined);
+  readonly $selectIsNoSelectedPost: Signal<boolean> = computed(() => this.$postState().selectedPostId === undefined ||
+    !this.$postState().isPostsLoading && this.$postState().posts.length === 0);
 
   readonly $selectIsPostsEmpty: Signal<boolean> = computed(() => !this.$postState().isPostsLoading && this.$postState().posts.length === 0);
 

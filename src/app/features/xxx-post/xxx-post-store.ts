@@ -150,6 +150,7 @@ export class XxxPostStore {
       this.postState.update(state =>
         ({
           ...state,
+          postForm: undefined,
           selectedPostId: postId
         })
       );

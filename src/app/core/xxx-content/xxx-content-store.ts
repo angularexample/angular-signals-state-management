@@ -144,7 +144,7 @@ export class XxxContentStore {
     // Create a new content object
     const content: XxxContentType = {
       contentModel: contentApi.contentModel,
-      status: contentApi.contentModel.pageTitle && contentApi.contentModel.pageTitle ? XxxContentStatus.LOADED : XxxContentStatus.EMPTY,
+      status: contentApi.contentModel && Object.keys(contentApi.contentModel).length ? XxxContentStatus.LOADED : XxxContentStatus.EMPTY,
       key: contentApi.key
     };
     // Remove any existing content, also replaces the old array for immutability

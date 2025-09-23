@@ -1,5 +1,5 @@
 <main>
-  <xxx-content contentKey="{{contentKey}}"></xxx-content>
+  <xxx-content [contentKey]="contentKey"></xxx-content>
   @if (content(); as content) {
     <section>
       <h2>{{ content?.contentModel?.pageTitle }}</h2>

@@ -26,7 +26,7 @@ export class XxxPostEdit {
     userId: new FormControl(xxxPostFormDataInitial.userId)
   });
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.contentByKey(this.contentKey);
   private postFacade: XxxPostFacade = inject(XxxPostFacade);
   protected readonly isNoSelectedPost: Signal<boolean> = this.postFacade.isNoSelectedPost;
   protected readonly isSaveButtonDisabled: Signal<boolean> = this.postFacade.isSaveButtonDisabled;

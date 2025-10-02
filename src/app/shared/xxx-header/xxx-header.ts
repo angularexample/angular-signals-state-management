@@ -14,5 +14,5 @@ import { XxxContent } from '../../core/xxx-content/xxx-content';
 export class XxxHeader {
   protected readonly contentKey: string = 'header';
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.contentByKey(this.contentKey);
 }

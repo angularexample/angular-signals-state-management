@@ -16,7 +16,7 @@ import { XxxPostFacade } from './xxx-post-facade';
 export class XxxPost {
   protected readonly contentKey: string = 'post';
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.contentByKey(this.contentKey);
   private postFacade: XxxPostFacade = inject(XxxPostFacade);
   protected readonly isNoSelectedUser: Signal<boolean> = this.postFacade.isNoSelectedUser;
   protected readonly isPostsEmpty: Signal<boolean> = this.postFacade.isPostsEmpty;

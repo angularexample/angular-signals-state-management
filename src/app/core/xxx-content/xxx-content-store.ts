@@ -60,7 +60,7 @@ export class XxxContentStore {
     this.contentState().contents
   );
 
-  selectContent(key: string): Signal<XxxContentType | undefined> {
+  selectContentByKey(key: string): Signal<XxxContentType | undefined> {
     return computed(() => {
       const contents: XxxContentType[] = this.selectContents();
       return contents.find(item => item.key === key);
@@ -69,7 +69,7 @@ export class XxxContentStore {
 
   selectIsContentEmpty(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContentByKey(key)();
       if (content) {
         return content?.status !== XxxContentStatus.ERROR && content?.status === XxxContentStatus.EMPTY;
       }
@@ -77,21 +77,20 @@ export class XxxContentStore {
     })
   }
 
-  private selectIsContentLoaded(key: string): Signal<boolean> {
+  selectIsContentError(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContentByKey(key)();
       if (content) {
-        return content?.status === XxxContentStatus.LOADED;
+        return content?.status === XxxContentStatus.ERROR;
       }
       return false;
     })
   }
-
-  selectIsContentLoading(key: string): Signal<boolean> {
+  private selectIsContentLoaded(key: string): Signal<boolean> {
     return computed(() => {
-      const content: XxxContentType | undefined = this.selectContent(key)();
+      const content: XxxContentType | undefined = this.selectContentByKey(key)();
       if (content) {
-        return content?.status === XxxContentStatus.LOADING;
+        return content?.status === XxxContentStatus.LOADED;
       }
       return false;
     })

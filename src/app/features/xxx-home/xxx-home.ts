@@ -16,5 +16,5 @@ import { XxxSanitizePipe } from '../../core/xxx-sanitize/xxx-sanitize-pipe';
 export class XxxHome {
   protected readonly contentKey = 'home';
   private contentFacade: XxxContentFacade = inject(XxxContentFacade);
-  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.content(this.contentKey);
+  protected readonly content: Signal<XxxContentType | undefined> = this.contentFacade.contentByKey(this.contentKey);
 }

@@ -1,31 +1,57 @@
-import { ChangeDetectionStrategy, Component, ContentChild, inject, Input, OnInit, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  contentChild,
+  DestroyRef,
+  inject,
+  input,
+  InputSignal,
+  OnInit,
+  Signal,
+  TemplateRef
+} from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Observable, tap } from 'rxjs';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { XxxLoadingService } from './xxx-loading-service';
 
-/*
-To turn off loading for certain http requests, set the context as in this example
-this.http.get('/api/courses', {
-  context: new HttpContext().set(SkipLoading, true),
-});
-
-To show loading during router route transitions
-add the attribute to the loading element as in this example
-<xxx-loading [detectRouteTransitions]='true'></xxx-loading>
-
- To use the http interceptor add this to the app module providers
-     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: XxxLoadingInterceptor,
-      multi: true,
-    },
+/**
+ * This component can show and hide the loading spinner automatically when:
+ * 1. router route transitions are detected - if the detectRouteTransitions input is true.
+ * 2. http requests are made - if the interceptor is used.
+ *
+ * The loading indicator can be customized by adding a template inside the loading component.
+ *   <xxx-loading>
+ *     <ng-template #customLoadingIndicator>
+ *       <div>
+ *         My Loading Indicator...
+ *       </div>
+ *     </ng-template>
+ *   </xxx-loading>>
+ *
+ * To show loading during router route transitions,
+ * add the attribute to the loading element as in this example
+ *   <xxx-loading [detectRouteTransitions]='true'></xxx-loading>
+ *
+ * The loading indicator will be shown only the first time the route uses lazy loading.
+ *
+ * To use the http interceptor, add this to the app module providers
+ *    {
+ *       provide: HTTP_INTERCEPTORS,
+ *       useClass: XxxLoadingInterceptor,
+ *       multi: true,
+ *   }
+ *
+ *   To turn off loading for certain http requests, set the context as in this example
+ *   this.http.get('/api/courses', {
+ *     context: new HttpContext().set(SkipLoading, true)
+ *   });
+ *
  */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    AsyncPipe,
     MatProgressSpinner,
     NgTemplateOutlet,
   ],
@@ -34,25 +60,27 @@ add the attribute to the loading element as in this example
   templateUrl: './xxx-loading.html',
 })
 export class XxxLoading implements OnInit {
-  @ContentChild('loading') customLoadingIndicator: TemplateRef<any> | null = null;
-  @Input() detectRouteTransitions = false;
+  customLoadingIndicator: Signal<TemplateRef<unknown> | undefined> = contentChild('customLoadingIndicator');
+  private destroyRef: DestroyRef = inject(DestroyRef);
+  detectRouteTransitions: InputSignal<boolean> = input<boolean>(false);
   private loadingService: XxxLoadingService = inject(XxxLoadingService);
-  protected readonly loading$: Observable<boolean>=this.loadingService.loading$;
+  protected readonly isLoading: Signal<boolean> = this.loadingService.isLoading;
   private router: Router = inject(Router);
 
   ngOnInit(): void {
-    if (this.detectRouteTransitions) {
+    if (this.detectRouteTransitions()) {
       this.router.events
         .pipe(
-          tap((event) => {
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe(
+          (event) => {
             if (event instanceof RouteConfigLoadStart) {
               this.loadingService.loadingOn();
             } else if (event instanceof RouteConfigLoadEnd) {
               this.loadingService.loadingOff();
             }
-          })
-        )
-        .subscribe();
+          }
+        );
     }
   }
 }

@@ -46,14 +46,14 @@ export class XxxPostStore {
     this.setPostFormReducer(post);
   }
 
-  setSelectedPostAction(postId: number): void {
-    this.setSelectedPostReducer(postId);
-    this.setSelectedPostEffect();
+  setSelectedPostIdAction(postId: number): void {
+    this.setSelectedPostIdReducer(postId);
+    this.setSelectedPostIdEffect();
   }
 
-  setSelectedUserAction(userId: number): void {
-    this.setSelectedUserReducer(userId);
-    this.setSelectedUserEffect();
+  setSelectedUserIdAction(userId: number): void {
+    this.setSelectedUserIdReducer(userId);
+    this.setSelectedUserIdEffect();
   }
 
   showPostsAction(): void {
@@ -61,7 +61,6 @@ export class XxxPostStore {
   }
 
   updatePostAction(): void {
-    this.updatePostReducer();
     this.updatePostEffect();
   }
 
@@ -84,8 +83,6 @@ export class XxxPostStore {
   readonly selectIsPostsLoaded: Signal<boolean> = computed(() => this.postState().posts.length > 0);
 
   readonly selectIsPostsLoading: Signal<boolean> = computed(() => this.postState().isPostsLoading);
-
-  readonly selectIsPostUpdating: Signal<boolean> = computed(() => this.postState().isPostUpdating);
 
   readonly selectSelectedPostId: Signal<number | undefined> = computed(() => this.postState().selectedPostId);
 
@@ -111,7 +108,7 @@ export class XxxPostStore {
     const postForm: XxxPostType | undefined = this.selectPostForm();
     const selectedPost: XxxPostType | undefined = this.selectSelectedPost();
     const isPostFormEqual: boolean = isPostsEqual(postForm, selectedPost);
-    return this.selectIsPostUpdating() || (!this.selectIsPostsLoaded()) || (this.selectSelectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
+    return (!this.selectIsPostsLoaded()) || (this.selectSelectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
   });
 
 // Reducers
@@ -144,7 +141,7 @@ export class XxxPostStore {
     );
   }
 
-  private setSelectedPostReducer(postId: number): void {
+  private setSelectedPostIdReducer(postId: number): void {
     // make sure the post exists
     if (this.postState().posts.some(item => item.id === postId)) {
       this.postState.update(state =>
@@ -168,21 +165,12 @@ export class XxxPostStore {
     );
   }
 
-  private setSelectedUserReducer(userId: number) {
+  private setSelectedUserIdReducer(userId: number) {
     // Use signal set instead of update when setting and not updating the state.
     this.postState.set(
       ({
         ...xxxPostInitialState,
         selectedUserId: userId,
-      })
-    );
-  }
-
-  private updatePostReducer(): void {
-    this.postState.update(state =>
-      ({
-        ...state,
-        isPostUpdating: true
       })
     );
   }
@@ -243,11 +231,11 @@ export class XxxPostStore {
     this.loadingService.loadingOff();
   }
 
-  private setSelectedPostEffect(): void {
+  private setSelectedPostIdEffect(): void {
     void this.router.navigateByUrl('/post/edit')
   }
 
-  private setSelectedUserEffect() {
+  private setSelectedUserIdEffect() {
     this.getPostsAction()
   }
 
@@ -262,7 +250,7 @@ export class XxxPostStore {
     const postSelectedUserId: number | undefined = this.selectSelectedUserId();
     if (selectedUserId !== undefined) {
       if (selectedUserId !== postSelectedUserId) {
-        this.setSelectedUserAction(selectedUserId);
+        this.setSelectedUserIdAction(selectedUserId);
       } else if (!this.selectIsPostsLoaded()) {
         this.getPostsAction();
       }

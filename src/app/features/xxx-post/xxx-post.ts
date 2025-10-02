@@ -31,6 +31,6 @@ export class XxxPost {
   }
 
   protected selectPost(post: XxxPostType): void {
-    this.postFacade.selectPost(post.id);
+    this.postFacade.setSelectedPostId(post.id);
   }
 }

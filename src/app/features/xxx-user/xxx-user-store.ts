@@ -41,9 +41,9 @@ export class XxxUserStore {
     this.getUsersSuccessEffect();
   }
 
-  setSelectedUserAction(userId: number): void {
-    this.selectUserReducer(userId);
-    this.selectUserEffect();
+  setSelectedUserIdAction(userId: number): void {
+    this.setSelectUserIdReducer(userId);
+    this.setSelectUserIdEffect();
   }
 
   showUsersAction(): void {
@@ -97,7 +97,7 @@ export class XxxUserStore {
     )
   }
 
-  private selectUserReducer(userId: number): void {
+  private setSelectUserIdReducer(userId: number): void {
     this.userState.update(state =>
       ({
         ...state,
@@ -141,7 +141,7 @@ export class XxxUserStore {
     this.loadingService.loadingOff();
   }
 
-  private selectUserEffect(): void {
+  private setSelectUserIdEffect(): void {
     void this.router.navigateByUrl('/post')
   }
 

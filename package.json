@@ -1,7 +1,7 @@
 {
-  "name": "angular20-signal-state",
-  "version": "1.0.1",
-  "description": "Angular State Management using Signals Example. Angular 20. No NgRx.",
+  "name": "angular-signals-state-management",
+  "version": "1.1.0",
+  "description": "Angular Signals State Management. Follows NgRx pattern.",
   "author": {
     "name": "JC Lango",
     "email": "info@angularexample.com"
@@ -12,7 +12,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "jest"
   },
   "prettier": {
     "printWidth": 100,
@@ -28,28 +28,25 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^20.2.2",
-    "@angular/common": "^20.2.0",
-    "@angular/compiler": "^20.2.0",
-    "@angular/core": "^20.2.0",
-    "@angular/forms": "^20.2.0",
-    "@angular/material": "^20.2.2",
-    "@angular/platform-browser": "^20.2.0",
-    "@angular/router": "^20.2.0",
+    "@angular/cdk": "^20.2.7",
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/material": "^20.2.7",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^20.2.2",
-    "@angular/cli": "^20.2.2",
-    "@angular/compiler-cli": "^20.2.0",
-    "@types/jasmine": "~5.1.0",
-    "jasmine-core": "~5.9.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "@angular/build": "^20.3.3",
+    "@angular/cli": "^20.3.3",
+    "@angular/compiler-cli": "^20.3.0",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "jest-preset-angular": "^15.0.2",
     "typescript": "~5.9.2"
   }
 }

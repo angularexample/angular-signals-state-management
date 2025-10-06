@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular20-signal-state": {
+    "angular-signals-state-management": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -59,10 +59,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular20-signal-state:build:production"
+              "buildTarget": "angular-signals-state-management:build:production"
             },
             "development": {
-              "buildTarget": "angular20-signal-state:build:development"
+              "buildTarget": "angular-signals-state-management:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,20 +71,9 @@
           "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular-devkit/build-angular:jest",
           "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.scss"
-            ]
+            "tsConfig": "tsconfig.spec.json"
           }
         }
       }

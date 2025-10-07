@@ -86,6 +86,7 @@ export class XxxContentStore {
       return false;
     })
   }
+
   private selectIsContentLoaded(key: string): Signal<boolean> {
     return computed(() => {
       const content: XxxContentType | undefined = this.selectContentByKey(key)();
@@ -193,6 +194,6 @@ export class XxxContentStore {
   }
 
   private getContentErrorEffect(key: string) {
-    this.alertService.showError('Error loading content for ' + key);
+    this.alertService.showError('Error. Unable to get content for ' + key);
   }
 }

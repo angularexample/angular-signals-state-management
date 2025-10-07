@@ -39,8 +39,8 @@ This will promote the repo and help others to find this solution.
 ## See the Article on Medium
 
 You can read the article on Medium for this project:
+[Angular Signals State Management](https://medium.com/@info_35389/angular-signals-state-management-5704d2d408c6)
 
-https://medium.com/@info_35389/mfe-angular-host-with-react-remote-using-nx-61067408eeb4
 
 ## Date Published
 

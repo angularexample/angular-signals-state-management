@@ -135,7 +135,7 @@ export class XxxUserStore {
 
   private getUsersErrorEffect(): void {
     this.loadingService.loadingOff();
-    this.alertService.showError('Error loading users');
+    this.alertService.showError('Error. Unable to get users');
   }
 
   private getUsersSuccessEffect(): void {

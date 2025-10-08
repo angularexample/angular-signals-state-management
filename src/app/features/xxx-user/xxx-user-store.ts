@@ -54,15 +54,16 @@ export class XxxUserStore {
   // A selector is used to read any data from the state.
   // In a Signal-based state, it is a function that returns a signal.
   // By design, it is the only way to read the state.
-  readonly selectSelectedUserId: Signal<number | undefined> = computed(() => this.userState().selectedUserId);
 
-  readonly selectUsers: Signal<XxxUserType[]> = computed(() => this.userState().users);
-
-  readonly selectIsUsersLoading: Signal<boolean> = computed(() => this.userState().isUsersLoading);
+  readonly selectIsUsersEmpty: Signal<boolean> = computed(() => !this.selectIsUsersLoading() && this.selectUsers().length === 0);
 
   readonly selectIsUsersLoaded: Signal<boolean> = computed(() => !this.selectIsUsersLoading() && this.selectUsers().length > 0);
 
-  readonly selectIsUsersEmpty: Signal<boolean> = computed(() => this.selectIsUsersLoaded() && this.selectUsers().length === 0);
+  readonly selectIsUsersLoading: Signal<boolean> = computed(() => this.userState().isUsersLoading);
+
+  readonly selectSelectedUserId: Signal<number | undefined> = computed(() => this.userState().selectedUserId);
+
+  readonly selectUsers: Signal<XxxUserType[]> = computed(() => this.userState().users);
 
   // Reducers
   // A reducer is a function that takes the current state and an action and returns a new state.

@@ -233,11 +233,11 @@ export class XxxPostStore {
   }
 
   private setSelectedPostIdEffect(): void {
-    void this.router.navigateByUrl('/post/edit')
+    void this.router.navigateByUrl('/post/edit');
   }
 
   private setSelectedUserIdEffect() {
-    this.getPosts()
+    this.getPosts();
   }
 
   // Logic to show user posts

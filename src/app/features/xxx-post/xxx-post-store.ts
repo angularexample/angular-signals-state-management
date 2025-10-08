@@ -203,7 +203,7 @@ export class XxxPostStore {
 
   // Effects
   private getPostsEffect(): void {
-    const userId: number | undefined = this.userFacade.selectedUserId();
+    const userId: number | undefined = this.selectedUserId();
     if (userId === undefined) {
       return;
     }
@@ -225,7 +225,7 @@ export class XxxPostStore {
 
   private getPostsErrorEffect(userId: number): void {
     this.loadingService.loadingOff();
-    this.alertService.showError('Error loading posts for user: ' + userId);
+    this.alertService.showError('Error. Unable to get posts for user ' + userId);
   }
 
   private getPostsSuccessEffect(): void {

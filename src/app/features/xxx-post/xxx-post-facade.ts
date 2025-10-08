@@ -7,30 +7,30 @@ import { XxxPostType } from './xxx-post-types';
 })
 export class XxxPostFacade {
   private postStore: XxxPostStore = inject(XxxPostStore);
-  readonly isNoSelectedPost: Signal<boolean> = this.postStore.selectIsNoSelectedPost;
-  readonly isNoSelectedUser: Signal<boolean> = this.postStore.selectIsNoSelectedUser;
-  readonly isPostsEmpty: Signal<boolean> = this.postStore.selectIsPostsEmpty;
-  readonly isPostsLoaded: Signal<boolean> = this.postStore.selectIsPostsLoaded;
-  readonly isPostsLoading: Signal<boolean> = this.postStore.selectIsPostsLoading;
-  readonly isSaveButtonDisabled: Signal<boolean> = this.postStore.selectIsSaveButtonDisabled;
-  readonly posts: Signal<XxxPostType[]> = this.postStore.selectPosts;
-  readonly selectedPost: Signal<XxxPostType | undefined> = this.postStore.selectSelectedPost;
-  readonly selectedPostId: Signal<number | undefined> = this.postStore.selectSelectedPostId;
-  readonly selectedUserId: Signal<number | undefined> = this.postStore.selectSelectedUserId;
+  readonly isNoSelectedPost: Signal<boolean> = this.postStore.isNoSelectedPost;
+  readonly isNoSelectedUser: Signal<boolean> = this.postStore.isNoSelectedUser;
+  readonly isPostsEmpty: Signal<boolean> = this.postStore.isPostsEmpty;
+  readonly isPostsLoaded: Signal<boolean> = this.postStore.isPostsLoaded;
+  readonly isPostsLoading: Signal<boolean> = this.postStore.isPostsLoading;
+  readonly isSaveButtonDisabled: Signal<boolean> = this.postStore.isSaveButtonDisabled;
+  readonly posts: Signal<XxxPostType[]> = this.postStore.posts;
+  readonly selectedPost: Signal<XxxPostType | undefined> = this.postStore.selectedPost;
+  readonly selectedPostId: Signal<number | undefined> = this.postStore.selectedPostId;
+  readonly selectedUserId: Signal<number | undefined> = this.postStore.selectedUserId;
 
   setSelectedPostId(postId: number): void {
-    this.postStore.setSelectedPostIdAction(postId);
+    this.postStore.setSelectedPostId(postId);
   }
 
   setPostForm(post: XxxPostType): void {
-    this.postStore.setPostFormAction(post)
+    this.postStore.setPostForm(post)
   }
 
   showPosts(): void {
-    this.postStore.showPostsAction();
+    this.postStore.showPosts();
   }
 
   updatePost(): void {
-    this.postStore.updatePostAction()
+    this.postStore.updatePost()
   }
 }

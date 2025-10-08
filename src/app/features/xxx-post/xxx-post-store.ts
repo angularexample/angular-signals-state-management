@@ -1,12 +1,12 @@
 import { catchError, of } from 'rxjs';
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { isPostsEqual } from "./xxx-post-utilities";
 import { Router } from '@angular/router';
 import { XxxAlert } from '../../core/xxx-alert/xxx-alert';
 import { XxxLoadingService } from '../../core/xxx-loading/xxx-loading-service';
-import { xxxPostInitialState, XxxPostState, XxxPostType } from './xxx-post-types';
 import { XxxPostData } from './xxx-post-data'
+import { xxxPostInitialState, XxxPostState, XxxPostType } from './xxx-post-types';
 import { XxxUserFacade } from '../xxx-user/xxx-user-facade';
-import { isPostsEqual } from "./xxx-post-utilities";
 
 /**
  * XxxPostStore is the feature state for the post page.
@@ -27,88 +27,88 @@ export class XxxPostStore {
   private postState: WritableSignal<XxxPostState> = signal<XxxPostState>(xxxPostInitialState);
 
   // Actions
-  private getPostsAction(): void {
+  private getPosts(): void {
     this.getPostsReducer();
     this.getPostsEffect();
   }
 
-  private getPostsErrorAction(userId: number): void {
+  private getPostsError(userId: number): void {
     this.getPostsErrorReducer();
     this.getPostsErrorEffect(userId);
   }
 
-  private getPostsSuccessAction(posts: XxxPostType[]): void {
+  private getPostsSuccess(posts: XxxPostType[]): void {
     this.getPostsSuccessReducer(posts);
     this.getPostsSuccessEffect();
   }
 
-  setPostFormAction(post: XxxPostType): void {
+  setPostForm(post: XxxPostType): void {
     this.setPostFormReducer(post);
   }
 
-  setSelectedPostIdAction(postId: number): void {
+  setSelectedPostId(postId: number): void {
     this.setSelectedPostIdReducer(postId);
     this.setSelectedPostIdEffect();
   }
 
-  setSelectedUserIdAction(userId: number): void {
+  setSelectedUserId(userId: number): void {
     this.setSelectedUserIdReducer(userId);
     this.setSelectedUserIdEffect();
   }
 
-  showPostsAction(): void {
+  showPosts(): void {
     this.showPostsEffect();
   }
 
-  updatePostAction(): void {
+  updatePost(): void {
     this.updatePostEffect();
   }
 
-  private updatePostErrorAction(postId: number): void {
+  private updatePostError(postId: number): void {
     this.updatePostErrorReducer();
     this.updatePostErrorEffect(postId);
   }
 
-  private updatePostSuccessAction(post: XxxPostType): void {
+  private updatePostSuccess(post: XxxPostType): void {
     this.updatePostSuccessReducer(post);
     this.updatePostSuccessEffect();
   }
 
   // Selectors
-  readonly selectIsNoSelectedPost: Signal<boolean> = computed(() => this.postState().selectedPostId === undefined ||
+  readonly isNoSelectedPost: Signal<boolean> = computed(() => this.postState().selectedPostId === undefined ||
     !this.postState().isPostsLoading && this.postState().posts.length === 0);
 
-  readonly selectIsPostsEmpty: Signal<boolean> = computed(() => !this.postState().isPostsLoading && this.postState().posts.length === 0);
+  readonly isPostsEmpty: Signal<boolean> = computed(() => !this.postState().isPostsLoading && this.postState().posts.length === 0);
 
-  readonly selectIsPostsLoaded: Signal<boolean> = computed(() => this.postState().posts.length > 0);
+  readonly isPostsLoaded: Signal<boolean> = computed(() => this.postState().posts.length > 0);
 
-  readonly selectIsPostsLoading: Signal<boolean> = computed(() => this.postState().isPostsLoading);
+  readonly isPostsLoading: Signal<boolean> = computed(() => this.postState().isPostsLoading);
 
-  readonly selectSelectedPostId: Signal<number | undefined> = computed(() => this.postState().selectedPostId);
+  readonly selectedPostId: Signal<number | undefined> = computed(() => this.postState().selectedPostId);
 
-  readonly selectSelectedUserId: Signal<number | undefined> = computed(() => this.postState().selectedUserId);
+  readonly selectedUserId: Signal<number | undefined> = computed(() => this.postState().selectedUserId);
 
-  readonly selectIsNoSelectedUser: Signal<boolean> = computed(() => this.selectSelectedUserId() === undefined);
+  readonly isNoSelectedUser: Signal<boolean> = computed(() => this.selectedUserId() === undefined);
 
-  private readonly selectPostForm: Signal<XxxPostType | undefined> = computed(() => this.postState().postForm);
+  private readonly postForm: Signal<XxxPostType | undefined> = computed(() => this.postState().postForm);
 
-  readonly selectPosts: Signal<XxxPostType[]> = computed(() => this.postState().posts);
+  readonly posts: Signal<XxxPostType[]> = computed(() => this.postState().posts);
 
-  readonly selectSelectedPost: Signal<XxxPostType | undefined> = computed(() => {
+  readonly selectedPost: Signal<XxxPostType | undefined> = computed(() => {
     let post: XxxPostType | undefined;
-    const posts: XxxPostType[] = this.selectPosts();
-    const postId: number | undefined = this.selectSelectedPostId();
+    const posts: XxxPostType[] = this.posts();
+    const postId: number | undefined = this.selectedPostId();
     if (postId !== undefined && posts.length > 0) {
       post = posts.find(item => item.id === postId);
     }
     return post;
   });
 
-  readonly selectIsSaveButtonDisabled: Signal<boolean> = computed(() => {
-    const postForm: XxxPostType | undefined = this.selectPostForm();
-    const selectedPost: XxxPostType | undefined = this.selectSelectedPost();
+  readonly isSaveButtonDisabled: Signal<boolean> = computed(() => {
+    const postForm: XxxPostType | undefined = this.postForm();
+    const selectedPost: XxxPostType | undefined = this.selectedPost();
     const isPostFormEqual: boolean = isPostsEqual(postForm, selectedPost);
-    return (!this.selectIsPostsLoaded()) || (this.selectSelectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
+    return (!this.isPostsLoaded()) || (this.selectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
   });
 
 // Reducers
@@ -211,13 +211,13 @@ export class XxxPostStore {
     this.postDataService.getPosts(userId).pipe(
       catchError(() => {
         isError = true;
-        this.getPostsErrorAction(userId);
+        this.getPostsError(userId);
         return of([]);
       })
     ).subscribe((response: unknown) => {
       if (!isError) {
         const posts: XxxPostType[] = response as XxxPostType[];
-        this.getPostsSuccessAction(posts);
+        this.getPostsSuccess(posts);
       }
     })
   }
@@ -236,7 +236,7 @@ export class XxxPostStore {
   }
 
   private setSelectedUserIdEffect() {
-    this.getPostsAction()
+    this.getPosts()
   }
 
   // Logic to show user posts
@@ -247,34 +247,34 @@ export class XxxPostStore {
   //    then get the user posts
   private showPostsEffect(): void {
     const selectedUserId: number | undefined = this.userFacade.selectedUserId();
-    const postSelectedUserId: number | undefined = this.selectSelectedUserId();
+    const postSelectedUserId: number | undefined = this.selectedUserId();
     if (selectedUserId !== undefined) {
       if (selectedUserId !== postSelectedUserId) {
-        this.setSelectedUserIdAction(selectedUserId);
-      } else if (!this.selectIsPostsLoaded()) {
-        this.getPostsAction();
+        this.setSelectedUserId(selectedUserId);
+      } else if (!this.isPostsLoaded()) {
+        this.getPosts();
       }
     }
   }
 
   private updatePostEffect(): void {
     this.loadingService.loadingOn();
-    const post: XxxPostType | undefined = this.selectPostForm();
+    const post: XxxPostType | undefined = this.postForm();
     if (post === undefined) {
       //unexpected error, post should not be undefined
-      this.updatePostErrorAction(0);
+      this.updatePostError(0);
       return;
     } else {
       let isError: boolean = false;
       this.postDataService.updatePost(post).pipe(
         catchError(() => {
           isError = true;
-          this.updatePostErrorAction(post.id);
+          this.updatePostError(post.id);
           return of({});
         })
       ).subscribe((postResponse: XxxPostType | {}) => {
         if (!isError && Object.keys(postResponse).length > 0) {
-          this.updatePostSuccessAction(postResponse as XxxPostType);
+          this.updatePostSuccess(postResponse as XxxPostType);
         }
       })
     }

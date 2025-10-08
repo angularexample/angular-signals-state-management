@@ -26,27 +26,27 @@ export class XxxUserStore {
 
   // Actions
   // An action is what triggers a change in the state or runs an effect.
-  private getUsersAction(): void {
+  private getUsers(): void {
     this.getUsersReducer();
     this.getUsersEffect();
   }
 
-  private getUsersErrorAction(): void {
+  private getUsersError(): void {
     this.getUsersErrorReducer();
     this.getUsersErrorEffect();
   }
 
-  private getUsersSuccessAction(users: XxxUserType[]): void {
+  private getUsersSuccess(users: XxxUserType[]): void {
     this.getUsersSuccessReducer(users);
     this.getUsersSuccessEffect();
   }
 
-  setSelectedUserIdAction(userId: number): void {
+  setSelectedUserId(userId: number): void {
     this.setSelectUserIdReducer(userId);
     this.setSelectUserIdEffect();
   }
 
-  showUsersAction(): void {
+  showUsers(): void {
     this.showUsersEffect();
   }
 
@@ -55,15 +55,15 @@ export class XxxUserStore {
   // In a Signal-based state, it is a function that returns a signal.
   // By design, it is the only way to read the state.
 
-  readonly selectIsUsersEmpty: Signal<boolean> = computed(() => !this.selectIsUsersLoading() && this.selectUsers().length === 0);
+  readonly isUsersEmpty: Signal<boolean> = computed(() => !this.isUsersLoading() && this.users().length === 0);
 
-  readonly selectIsUsersLoaded: Signal<boolean> = computed(() => !this.selectIsUsersLoading() && this.selectUsers().length > 0);
+  readonly isUsersLoaded: Signal<boolean> = computed(() => !this.isUsersLoading() && this.users().length > 0);
 
-  readonly selectIsUsersLoading: Signal<boolean> = computed(() => this.userState().isUsersLoading);
+  readonly isUsersLoading: Signal<boolean> = computed(() => this.userState().isUsersLoading);
 
-  readonly selectSelectedUserId: Signal<number | undefined> = computed(() => this.userState().selectedUserId);
+  readonly selectedUserId: Signal<number | undefined> = computed(() => this.userState().selectedUserId);
 
-  readonly selectUsers: Signal<XxxUserType[]> = computed(() => this.userState().users);
+  readonly users: Signal<XxxUserType[]> = computed(() => this.userState().users);
 
   // Reducers
   // A reducer is a function that takes the current state and an action and returns a new state.
@@ -116,7 +116,7 @@ export class XxxUserStore {
     this.userDataService.getUsers().pipe(
       catchError(() => {
         isError = true;
-        this.getUsersErrorAction();
+        this.getUsersError();
         const emptyResponse: XxxUserApiResponse = {
           limit: 0,
           skip: 0,
@@ -128,7 +128,7 @@ export class XxxUserStore {
     ).subscribe((response: unknown): void => {
       if (!isError) {
         const apiResponse: XxxUserApiResponse = response as XxxUserApiResponse;
-        this.getUsersSuccessAction(apiResponse.users);
+        this.getUsersSuccess(apiResponse.users);
       }
     })
   }
@@ -147,8 +147,8 @@ export class XxxUserStore {
   }
 
   private showUsersEffect(): void {
-    if (!this.selectIsUsersLoaded()) {
-      this.getUsersAction();
+    if (!this.isUsersLoaded()) {
+      this.getUsers();
     }
   }
 }

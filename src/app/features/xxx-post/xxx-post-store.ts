@@ -78,17 +78,20 @@ export class XxxPostStore {
   readonly isNoSelectedPost: Signal<boolean> = computed(() => this.postState().selectedPostId === undefined ||
     !this.postState().isPostsLoading && this.postState().posts.length === 0);
 
+  readonly isNoSelectedUser: Signal<boolean> = computed(() => this.selectedUserId() === undefined);
+
   readonly isPostsEmpty: Signal<boolean> = computed(() => !this.postState().isPostsLoading && this.postState().posts.length === 0);
 
   readonly isPostsLoaded: Signal<boolean> = computed(() => this.postState().posts.length > 0);
 
   readonly isPostsLoading: Signal<boolean> = computed(() => this.postState().isPostsLoading);
 
-  readonly selectedPostId: Signal<number | undefined> = computed(() => this.postState().selectedPostId);
-
-  readonly selectedUserId: Signal<number | undefined> = computed(() => this.postState().selectedUserId);
-
-  readonly isNoSelectedUser: Signal<boolean> = computed(() => this.selectedUserId() === undefined);
+  readonly isSaveButtonDisabled: Signal<boolean> = computed(() => {
+    const postForm: XxxPostType | undefined = this.postForm();
+    const selectedPost: XxxPostType | undefined = this.selectedPost();
+    const isPostFormEqual: boolean = isPostsEqual(postForm, selectedPost);
+    return (!this.isPostsLoaded()) || (this.selectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
+  });
 
   private readonly postForm: Signal<XxxPostType | undefined> = computed(() => this.postState().postForm);
 
@@ -104,12 +107,10 @@ export class XxxPostStore {
     return post;
   });
 
-  readonly isSaveButtonDisabled: Signal<boolean> = computed(() => {
-    const postForm: XxxPostType | undefined = this.postForm();
-    const selectedPost: XxxPostType | undefined = this.selectedPost();
-    const isPostFormEqual: boolean = isPostsEqual(postForm, selectedPost);
-    return (!this.isPostsLoaded()) || (this.selectedPost() === undefined) || (postForm === undefined) || isPostFormEqual;
-  });
+  readonly selectedPostId: Signal<number | undefined> = computed(() => this.postState().selectedPostId);
+
+  readonly selectedUserId: Signal<number | undefined> = computed(() => this.postState().selectedUserId);
+
 
 // Reducers
   private getPostsReducer(): void {

@@ -4,10 +4,10 @@ import { XxxContentStore } from './xxx-content-store';
 
 describe('XxxContentFacade', () => {
   const mockXxxContentStore = {
-    selectContentByKey: jest.fn(),
-    selectIsContentEmpty: jest.fn(),
-    selectIsContentError: jest.fn(),
-    showContentAction: jest.fn(),
+    contentByKey: jest.fn(),
+    isContentEmpty: jest.fn(),
+    isContentError: jest.fn(),
+    showContent: jest.fn(),
   };
   let service: XxxContentFacade;
   const contentKey: string = 'content-key';
@@ -41,22 +41,22 @@ describe('XxxContentFacade', () => {
   describe('methods', () => {
     it('should run contentStore.contentByKey', () => {
       service.contentByKey(contentKey);
-      expect(mockXxxContentStore.selectContentByKey).toHaveBeenCalledWith(contentKey);
+      expect(mockXxxContentStore.contentByKey).toHaveBeenCalledWith(contentKey);
     });
 
     it('should run contentStore.isContentEmpty', () => {
       service.isContentEmpty(contentKey);
-      expect(mockXxxContentStore.selectIsContentEmpty).toHaveBeenCalledWith(contentKey);
+      expect(mockXxxContentStore.isContentEmpty).toHaveBeenCalledWith(contentKey);
     });
 
     it('should run contentStore.isContentError', () => {
       service.isContentError(contentKey);
-      expect(mockXxxContentStore.selectIsContentError).toHaveBeenCalledWith(contentKey);
+      expect(mockXxxContentStore.isContentError).toHaveBeenCalledWith(contentKey);
     });
 
     it('should run contentStore.showContent', () => {
       service.showContent(contentKey);
-      expect(mockXxxContentStore.showContentAction).toHaveBeenCalledWith(contentKey);
+      expect(mockXxxContentStore.showContent).toHaveBeenCalledWith(contentKey);
     });
   });
 });

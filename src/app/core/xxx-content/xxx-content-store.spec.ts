@@ -46,93 +46,93 @@ describe('XxxContentStore', () => {
       expect(service).toBeDefined();
     });
 
-    it('should have showContentAction', () => {
-      expect(service.showContentAction).toBeDefined();
+    it('should have showContent', () => {
+      expect(service.showContent).toBeDefined();
     });
 
-    it('should have selectContentByKey', () => {
-      expect(service.selectContentByKey).toBeDefined();
+    it('should have contentByKey', () => {
+      expect(service.contentByKey).toBeDefined();
     });
 
-    it('should have selectIsContentEmpty', () => {
-      expect(service.selectIsContentEmpty).toBeDefined();
+    it('should have isContentEmpty', () => {
+      expect(service.isContentEmpty).toBeDefined();
     });
 
-    it('should have selectIsContentError', () => {
-      expect(service.selectIsContentError).toBeDefined();
+    it('should have isContentError', () => {
+      expect(service.isContentError).toBeDefined();
     });
   })
 
-  describe('selectContentByKey', () => {
+  describe('contentByKey', () => {
     it('should return expected content by key', () => {
-      service.showContentAction(contentKey);
-      const result: Signal<XxxContentType | undefined> = service.selectContentByKey(contentKey);
+      service.showContent(contentKey);
+      const result: Signal<XxxContentType | undefined> = service.contentByKey(contentKey);
       expect(result()).toEqual(mockContentHome);
     });
   });
 
-  describe('selectIsContentEmpty', () => {
+  describe('isContentEmpty', () => {
     it('should return true when content is empty', () => {
       contentKey = 'empty';
       mockXxxContentData.getContent.mockReturnValue(of(mockContentApiEmpty));
-      service.showContentAction(contentKey);
-      const result: Signal<boolean> = service.selectIsContentEmpty(contentKey);
+      service.showContent(contentKey);
+      const result: Signal<boolean> = service.isContentEmpty(contentKey);
       expect(result()).toBe(true);
     });
 
     it('should return false when content is not empty', () => {
-      service.showContentAction(contentKey);
-      const result: Signal<boolean> = service.selectIsContentEmpty(contentKey);
+      service.showContent(contentKey);
+      const result: Signal<boolean> = service.isContentEmpty(contentKey);
       expect(result()).toBe(false);
     });
 
     it('should return false when content is not found', () => {
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       contentKey = 'none';
-      const result: Signal<boolean> = service.selectIsContentEmpty(contentKey);
+      const result: Signal<boolean> = service.isContentEmpty(contentKey);
       expect(result()).toBe(false);
     });
   });
 
-  describe('selectIsContentError', () => {
+  describe('isContentError', () => {
     it('should return true when content has error', () => {
       mockXxxContentData.getContent.mockReturnValue(throwError(() => new Error('some error')));
-      service.showContentAction(contentKey);
-      const result: Signal<boolean> = service.selectIsContentError(contentKey);
+      service.showContent(contentKey);
+      const result: Signal<boolean> = service.isContentError(contentKey);
       expect(result()).toBe(true);
     });
 
     it('should return false when content does not have error', () => {
-      service.showContentAction(contentKey);
-      const result: Signal<boolean> = service.selectIsContentError(contentKey);
+      service.showContent(contentKey);
+      const result: Signal<boolean> = service.isContentError(contentKey);
       expect(result()).toBe(false);
     });
 
     it('should return false when content is not found', () => {
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       contentKey = 'none';
-      const result: Signal<boolean> = service.selectIsContentError(contentKey);
+      const result: Signal<boolean> = service.isContentError(contentKey);
       expect(result()).toBe(false);
     });
   });
 
-  describe('showContentAction', () => {
+  describe('showContent', () => {
     it('should handle success', () => {
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       expect(mockXxxContentData.getContent).toHaveBeenCalledWith(contentKey);
     });
 
     it('should handle error', () => {
       const errorMessage: string = `Error. Unable to get content for ${contentKey}`;
       mockXxxContentData.getContent.mockReturnValue(throwError(() => new Error('some error')));
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       expect(mockXxxAlert.showError).toHaveBeenCalledWith(errorMessage);
     });
 
     it('should handle case where content is loaded', () => {
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       mockXxxContentData.getContent.mockClear();
-      service.showContentAction(contentKey);
+      service.showContent(contentKey);
       expect(mockXxxContentData.getContent).not.toHaveBeenCalled();
     });
   })

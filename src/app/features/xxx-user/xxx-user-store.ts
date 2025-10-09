@@ -73,7 +73,7 @@ export class XxxUserStore {
     this.userState.update(state =>
       ({
         ...state,
-        isLoading: true,
+        isUsersLoading: true,
         users: []
       })
     )
@@ -83,7 +83,7 @@ export class XxxUserStore {
     this.userState.update(state =>
       ({
         ...state,
-        isLoading: false
+        isUsersLoading: false
       })
     )
   }
@@ -92,7 +92,7 @@ export class XxxUserStore {
     this.userState.update(state =>
       ({
         ...state,
-        isLoading: false,
+        isUsersLoading: false,
         users
       })
     )

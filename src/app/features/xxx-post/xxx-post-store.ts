@@ -225,7 +225,7 @@ export class XxxPostStore {
 
   private getPostsErrorEffect(userId: number): void {
     this.loadingService.loadingOff();
-    this.alertService.showError('Error. Unable to get posts for user ' + userId);
+    this.alertService.showError('Error. Unable to get posts for user: ' + userId);
   }
 
   private getPostsSuccessEffect(): void {
@@ -240,20 +240,12 @@ export class XxxPostStore {
     this.getPosts();
   }
 
-  // Logic to show user posts
-  // 1. If there is no selected user, then do nothing
-  // 2. If the selected user is different from the user id in the Post state,
-  //    then set the user id in the Post state to the selected user id
-  // 3. If posts are not loaded and the user id in the Post state is the same as the user id,
-  //    then get the user posts
   private showPostsEffect(): void {
     const selectedUserId: number | undefined = this.userFacade.selectedUserId();
     const postSelectedUserId: number | undefined = this.selectedUserId();
     if (selectedUserId !== undefined) {
       if (selectedUserId !== postSelectedUserId) {
         this.setSelectedUserId(selectedUserId);
-      } else if (!this.isPostsLoaded()) {
-        this.getPosts();
       }
     }
   }
@@ -283,7 +275,7 @@ export class XxxPostStore {
 
   private updatePostErrorEffect(postId: number): void {
     this.loadingService.loadingOff();
-    this.alertService.showError('Error occurred. Unable to update post: ' + postId);
+    this.alertService.showError('Error. Unable to update post: ' + postId);
   }
 
   private updatePostSuccessEffect(): void {

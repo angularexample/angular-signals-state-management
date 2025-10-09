@@ -82,7 +82,7 @@ export class XxxPostStore {
 
   readonly isPostsEmpty: Signal<boolean> = computed(() => !this.postState().isPostsLoading && this.postState().posts.length === 0);
 
-  readonly isPostsLoaded: Signal<boolean> = computed(() => this.postState().posts.length > 0);
+  readonly isPostsLoaded: Signal<boolean> = computed(() => !this.postState().isPostsLoading && this.postState().posts.length > 0);
 
   readonly isPostsLoading: Signal<boolean> = computed(() => this.postState().isPostsLoading);
 
@@ -117,7 +117,7 @@ export class XxxPostStore {
     this.postState.update(state =>
       ({
         ...state,
-        isLoading: true,
+        isUsersLoading: true,
         Posts: []
       })
     );
@@ -127,7 +127,7 @@ export class XxxPostStore {
     this.postState.update(state =>
       ({
         ...state,
-        isLoading: false
+        isUsersLoading: false
       })
     );
   }
@@ -136,7 +136,7 @@ export class XxxPostStore {
     this.postState.update(state =>
       ({
         ...state,
-        isLoading: false,
+        isUsersLoading: false,
         posts
       })
     );

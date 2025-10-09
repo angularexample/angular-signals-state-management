@@ -123,7 +123,7 @@ describe('XxxContentStore', () => {
     });
 
     it('should handle error', () => {
-      const errorMessage: string = `Error. Unable to get content for ${contentKey}`;
+      const errorMessage: string = `Error. Unable to get content for: ${contentKey}`;
       mockXxxContentData.getContent.mockReturnValue(throwError(() => new Error('some error')));
       service.showContent(contentKey);
       expect(mockXxxAlert.showError).toHaveBeenCalledWith(errorMessage);

@@ -193,6 +193,6 @@ export class XxxContentStore {
   }
 
   private getContentErrorEffect(key: string) {
-    this.alertService.showError('Error. Unable to get content for ' + key);
+    this.alertService.showError(`Error. Unable to get content for: ${key}`);
   }
 }

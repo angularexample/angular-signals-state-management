@@ -1,7 +1,7 @@
 import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { XxxHeader } from './xxx-header';
 import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
+import { XxxHeader } from './xxx-header';
 
 describe('XxxHeader', () => {
   let fixture: ComponentFixture<XxxHeader>;

@@ -3,8 +3,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { mockContentHome } from './xxx-content.mocks';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { XxxContentData } from './xxx-content-data';
 import { XxxContentApi } from './xxx-content-types';
+import { XxxContentData } from './xxx-content-data';
 
 describe('XxxContentData', () => {
   let service: XxxContentData;

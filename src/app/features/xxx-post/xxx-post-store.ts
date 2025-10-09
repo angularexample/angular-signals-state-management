@@ -205,6 +205,7 @@ export class XxxPostStore {
   private getPostsEffect(): void {
     const userId: number | undefined = this.selectedUserId();
     if (userId === undefined) {
+      this.getPostsError(0);
       return;
     }
     this.loadingService.loadingOn();

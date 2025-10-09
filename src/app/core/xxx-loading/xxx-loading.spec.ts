@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Route, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { XxxLoadingService } from './xxx-loading-service';
 import { XxxLoading } from './xxx-loading';
+import { XxxLoadingService } from './xxx-loading-service';
 
 // To test the router events, use a mock component.
 @Component({

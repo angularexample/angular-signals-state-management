@@ -18,9 +18,9 @@ export class XxxLoadingInterceptor
   private loadingService: XxxLoadingService = inject(XxxLoadingService);
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     // Check for a context attribute to not show the loading indicator
     if (req.context.get(SKIP_LOADING)) {
       // Pass the request directly to the next handler

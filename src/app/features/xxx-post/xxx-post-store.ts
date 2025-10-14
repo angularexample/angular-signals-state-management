@@ -188,7 +188,7 @@ export class XxxPostStore {
   private updatePostSuccessReducer(post: XxxPostType): void {
     this.postState.update(state => {
         // remove the old post, add the new one, sort by id
-        let posts = state.posts.filter(item => item.id !== post.id);
+        const posts = state.posts.filter(item => item.id !== post.id);
         const updatedPost: XxxPostType = {...post};
         posts.push(updatedPost);
         posts.sort((a: XxxPostType, b: XxxPostType) => a.id - b.id);
@@ -266,7 +266,7 @@ export class XxxPostStore {
           this.updatePostError(post.id);
           return of({});
         })
-      ).subscribe((postResponse: XxxPostType | {}) => {
+      ).subscribe((postResponse: XxxPostType | object) => {
         if (!isError && Object.keys(postResponse).length > 0) {
           this.updatePostSuccess(postResponse as XxxPostType);
         }

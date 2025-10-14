@@ -40,7 +40,7 @@ describe('XxxLoading', () => {
     loadingOn: jest.fn(),
   }
 
-  const routerEventsSubject: Subject<any> = new Subject<any>()
+  const routerEventsSubject: Subject<RouteConfigLoadStart | RouteConfigLoadEnd> = new Subject<RouteConfigLoadStart | RouteConfigLoadEnd>()
 
   const mockRouter = {
     events: routerEventsSubject.asObservable(),

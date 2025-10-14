@@ -7,7 +7,6 @@ describe('XxxAlert', () => {
   const mockMatSnackBar = {
     open: jest.fn(),
   };
-  let service: XxxAlert;
 
   TestBed.configureTestingModule({
     providers: [
@@ -16,7 +15,7 @@ describe('XxxAlert', () => {
     ],
   });
 
-  service = TestBed.inject(XxxAlert);
+  const service: XxxAlert = TestBed.inject(XxxAlert);
 
   it('should be created', () => {
     expect(service).toBeDefined();

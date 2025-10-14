@@ -7,14 +7,14 @@ import { XxxLoadingService } from './xxx-loading-service';
 describe('XxxLoadingInterceptor', () => {
   let service: XxxLoadingInterceptor;
   const url: string = 'https://dummyjson.com/users';
-  let req: HttpRequest<any>;
+  let req: HttpRequest<unknown>;
 
   const mockXxxLoadingService = {
     loadingOff: jest.fn(),
     loadingOn: jest.fn(),
   }
   const mockHandler = {
-    handle: (req: HttpRequest<any>): Observable<HttpEvent<any>> => of(new HttpResponse(req))
+    handle: (req: HttpRequest<unknown>): Observable<HttpEvent<unknown>> => of(new HttpResponse(req))
   };
 
   const spyHandler = jest.spyOn(mockHandler, 'handle');

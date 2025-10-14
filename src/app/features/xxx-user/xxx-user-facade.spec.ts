@@ -14,7 +14,6 @@ describe('XxxUserFacade', () => {
     showUsers: jest.fn(),
     users: jest.fn(),
   };
-  let service: XxxUserFacade;
 
   TestBed.configureTestingModule({
     providers: [
@@ -23,7 +22,7 @@ describe('XxxUserFacade', () => {
     ],
   });
 
-  service = TestBed.inject(XxxUserFacade);
+  const service: XxxUserFacade = TestBed.inject(XxxUserFacade);
   describe('constructor phase', () => {
     it('should be created', () => {
       expect(service).toBeDefined();

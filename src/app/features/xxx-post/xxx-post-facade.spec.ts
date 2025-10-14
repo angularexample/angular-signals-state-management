@@ -20,7 +20,6 @@ describe('XxxPostFacade', () => {
     showPosts: jest.fn(),
     updatePost: jest.fn(),
   };
-  let service: XxxPostFacade;
 
   TestBed.configureTestingModule({
     providers: [
@@ -29,7 +28,7 @@ describe('XxxPostFacade', () => {
     ],
   });
 
-  service = TestBed.inject(XxxPostFacade);
+  const service: XxxPostFacade = TestBed.inject(XxxPostFacade);
   describe('constructor phase', () => {
     it('should be created', () => {
       expect(service).toBeDefined();

@@ -9,7 +9,6 @@ describe('XxxContentFacade', () => {
     isContentError: jest.fn(),
     showContent: jest.fn(),
   };
-  let service: XxxContentFacade;
   const contentKey: string = 'content-key';
 
   TestBed.configureTestingModule({
@@ -19,7 +18,8 @@ describe('XxxContentFacade', () => {
     ],
   });
 
-  service = TestBed.inject(XxxContentFacade);
+  const service: XxxContentFacade = TestBed.inject(XxxContentFacade);
+
   describe('constructor phase', () => {
     it('should be created', () => {
       expect(service).toBeDefined();

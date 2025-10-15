@@ -203,11 +203,7 @@ export class XxxPostStore {
 
   // Effects
   private getPostsEffect(): void {
-    const userId: number | undefined = this.selectedUserId();
-    if (userId === undefined) {
-      this.getPostsError(0);
-      return;
-    }
+    const userId: number = this.selectedUserId() || 0;
     this.loadingService.loadingOn();
     let isError = false;
     this.postDataService.getPosts(userId).pipe(

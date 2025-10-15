@@ -1,5 +1,5 @@
 import { Component, Signal } from '@angular/core';
-import { mockPost, mockPosts } from './xxx-post.mocks';
+import { mockPost, mockPost1, mockPost2, mockPosts } from './xxx-post.mocks';
 import { of, throwError } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Route, Router } from '@angular/router';
@@ -22,7 +22,7 @@ describe('XxxPostStore', () => {
   let router: Router;
   let spyRouterNavigate: jest.SpyInstance;
   let store: XxxPostStore;
-  const userId = mockPost.userId;
+  const userId: number = mockPost.userId;
 
   const mockRoutes: Route[] = [
     {
@@ -156,12 +156,11 @@ describe('XxxPostStore', () => {
       expect(result()).toBe(true);
     });
 
-    //   it('should be false when there are posts', () => {
-    //     store.setSelectedUserId(userId);
-    //     store.getPosts();
-    //     const result: Signal<boolean> = store.isPostsEmpty;
-    //     expect(result()).toBe(false);
-    //   });
+      it('should be false when there are posts', () => {
+        store.setSelectedUserId(userId);
+        const result: Signal<boolean> = store.isPostsEmpty;
+        expect(result()).toBe(false);
+      });
   })
 
   describe('isPostsLoaded', () => {
@@ -170,12 +169,11 @@ describe('XxxPostStore', () => {
       expect(result()).toBe(false);
     });
 
-    // it('should be true when there are posts', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   const result: Signal<boolean> = store.isPostsLoaded;
-    //   expect(result()).toBe(true);
-    // });
+    it('should be true when there are posts', () => {
+      store.setSelectedUserId(userId);
+      const result: Signal<boolean> = store.isPostsLoaded;
+      expect(result()).toBe(true);
+    });
   })
 
   describe('selectedPost', () => {
@@ -184,13 +182,12 @@ describe('XxxPostStore', () => {
       expect(result()).toBeUndefined();
     });
 
-    // it('should be true when there are posts', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   store.setSelectedPostId(mockPost.id);
-    //   const result: Signal<XxxPostType | undefined> = store.selectedPost;
-    //   expect(result()).toEqual(mockPost);
-    // });
+    it('should be true when there are posts', () => {
+      store.setSelectedUserId(userId);
+      store.setSelectedPostId(mockPost.id);
+      const result: Signal<XxxPostType | undefined> = store.selectedPost;
+      expect(result()).toEqual(mockPost);
+    });
   })
 
   describe('isNoSelectedPost', () => {
@@ -217,7 +214,6 @@ describe('XxxPostStore', () => {
 
     it('should be false when there is a selected post id and it matches a post', () => {
       store.setSelectedUserId(userId);
-      //store.getPosts();
       store.setSelectedPostId(mockPost.id);
       const result = store.isNoSelectedPost;
       expect(result()).toBe(false);
@@ -225,61 +221,57 @@ describe('XxxPostStore', () => {
   });
 
   describe('isSaveButtonDisabled and setPostForm', () => {
-    // it('should be true when there is selected post and it equals the form post', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   store.setSelectedPostId(mockPost.id);
-    //   store.setPostForm(mockPost1);
-    //   const result = store.isSaveButtonDisabled;
-    //   expect(result()).toBe(true);
-    // });
+    it('should be true when there is selected post and it equals the form post', () => {
+      store.setSelectedUserId(userId);
+      store.setSelectedPostId(mockPost.id);
+      store.setPostForm(mockPost1);
+      const result = store.isSaveButtonDisabled;
+      expect(result()).toBe(true);
+    });
 
-    // it('should be false when there is a selected post and it doe not equal the form post', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   store.setSelectedPostId(mockPost.id);
-    //   store.setPostForm(mockPost2);
-    //   const result = store.isSaveButtonDisabled;
-    //   expect(result()).toBe(false);
-    // });
+    it('should be false when there is a selected post and it does not equal the form post', () => {
+      store.setSelectedUserId(userId);
+      store.setSelectedPostId(mockPost.id);
+      store.setPostForm(mockPost2);
+      const result = store.isSaveButtonDisabled;
+      expect(result()).toBe(false);
+    });
   })
 
   describe('getPosts', () => {
-    // it('should run XxxPostData.getPosts', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   expect(mockXxxPostData.getPosts).toHaveBeenCalled();
-    // });
+    it('should run XxxPostData.getPosts', () => {
+      store.setSelectedUserId(userId);
+      expect(mockXxxPostData.getPosts).toHaveBeenCalled();
+    });
 
-    // it('should run XxxLoadingService.loadingOn and loadingOff', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   expect(mockXxxLoadingService.loadingOn).toHaveBeenCalled();
-    //   expect(mockXxxLoadingService.loadingOff).toHaveBeenCalled();
-    // });
+    it('should run XxxLoadingService.loadingOn and loadingOff', () => {
+      store.setSelectedUserId(userId);
+      expect(mockXxxLoadingService.loadingOn).toHaveBeenCalled();
+      expect(mockXxxLoadingService.loadingOff).toHaveBeenCalled();
+    });
 
-    // it('should run XxxAlert.showError on error', () => {
-    //   const errorMessage: string = `Error. Unable to get posts for user: ${userId}`;
-    //   mockXxxPostData.getPosts.mockReturnValue(throwError(() => new Error('some error')));
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   expect(mockXxxAlert.showError).toHaveBeenCalledWith(errorMessage);
-    // });
+    it('should run XxxAlert.showError on error', () => {
+      const errorMessage: string = `Error. Unable to get posts for user: ${userId}`;
+      mockXxxPostData.getPosts.mockReturnValue(throwError(() => new Error('some error')));
+      store.setSelectedUserId(userId);
+      expect(mockXxxAlert.showError).toHaveBeenCalledWith(errorMessage);
+    });
 
-    // it('should not run XxxPostData.getPosts when userId is undefined', () => {
-    //   store.getPosts();
-    //   expect(mockXxxPostData.getPosts).not.toHaveBeenCalled();
-    // });
+    it('should not run XxxPostData.getPosts when userId is undefined', () => {
+      mockXxxUserFacade.selectedUserId.mockReturnValue(undefined);
+      store.showPosts();
+      expect(mockXxxPostData.getPosts).not.toHaveBeenCalled();
+    });
+
   })
 
   describe('setSelectedPostId', () => {
-    // it('should have expected selected post id', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   store.setSelectedPostId(mockPost1.id);
-    //   const result: Signal<number | undefined> = store.selectedPostId;
-    //   expect(result()).toBe(mockPost1.id);
-    // });
+    it('should have expected selected post id', () => {
+      store.setSelectedUserId(userId);
+      store.setSelectedPostId(mockPost1.id);
+      const result: Signal<number | undefined> = store.selectedPostId;
+      expect(result()).toBe(mockPost1.id);
+    });
 
     it('should run router navigate', () => {
       store.setSelectedPostId(userId);
@@ -300,13 +292,6 @@ describe('XxxPostStore', () => {
       const result: Signal<number | undefined> = store.selectedPostId;
       expect(result()).toBe(undefined);
     });
-
-    // it('should set postForm to undefined', () => {
-    //   store.setPostForm(mockPost);
-    //   store.setSelectedUserId(userId);
-    //   const result: Signal<number | undefined> | undefined= store.postForm;
-    //   expect(result()).toBe(undefined);
-    // });
   });
 
   describe('updatePost', () => {
@@ -345,13 +330,12 @@ describe('XxxPostStore', () => {
       expect(mockXxxPostData.getPosts).toHaveBeenCalled();
     });
 
-    // it('should not call getPosts when posts is not empty', () => {
-    //   store.setSelectedUserId(userId);
-    //   store.getPosts();
-    //   mockXxxPostData.getPosts.mockClear();
-    //   store.showPosts();
-    //   expect(mockXxxPostData.getPosts).not.toHaveBeenCalled();
-    // });
+    it('should not call getPosts when posts is not empty', () => {
+      store.setSelectedUserId(userId);
+      mockXxxPostData.getPosts.mockClear();
+      store.showPosts();
+      expect(mockXxxPostData.getPosts).not.toHaveBeenCalled();
+    });
 
     it('should call setSelectedUserId when userId is not the same from user ', () => {
       store.setSelectedUserId(0);

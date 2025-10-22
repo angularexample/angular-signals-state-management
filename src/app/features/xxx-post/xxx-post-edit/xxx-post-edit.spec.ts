@@ -38,9 +38,9 @@ describe('XxxPostEdit', () => {
   }
 
   const mockXxxPostFacade = {
-    isNoSelectedPost: jest.fn().mockReturnValue(signal(false)),
-    isSaveButtonDisabled: jest.fn().mockReturnValue(signal(false)),
-    selectedPost: jest.fn().mockReturnValue(signal(mockPost)),
+    isNoSelectedPost: signal(false),
+    isSaveButtonDisabled: signal(false),
+    selectedPost: signal(mockPost),
     setPostForm: jest.fn(),
     updatePost: jest.fn(),
   }

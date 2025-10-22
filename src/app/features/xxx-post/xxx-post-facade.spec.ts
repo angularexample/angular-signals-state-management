@@ -1,20 +1,21 @@
-import { mockPost } from './xxx-post.mocks';
+import { mockPost, mockPosts } from './xxx-post.mocks';
+import { signal } from "@angular/core";
 import { TestBed } from '@angular/core/testing';
 import { XxxPostFacade } from './xxx-post-facade';
 import { XxxPostStore } from './xxx-post-store';
 
 describe('XxxPostFacade', () => {
   const mockXxxPostStore = {
-    isNoSelectedPost: jest.fn(),
-    isNoSelectedUser: jest.fn(),
-    isPostsEmpty: jest.fn(),
-    isPostsLoaded: jest.fn(),
-    isPostsLoading: jest.fn(),
-    isSaveButtonDisabled: jest.fn(),
-    posts: jest.fn(),
-    selectedPost: jest.fn(),
-    selectedPostId: jest.fn(),
-    selectedUserId: jest.fn(),
+    isNoSelectedPost: signal(false),
+    isNoSelectedUser: signal(false),
+    isPostsEmpty: signal(false),
+    isPostsLoaded: signal(false),
+    isPostsLoading: signal(false),
+    isSaveButtonDisabled: signal(false),
+    posts: signal(mockPosts),
+    selectedPost: signal(mockPost),
+    selectedPostId: signal(mockPost.id),
+    selectedUserId: signal(mockPost.userId),
     setPostForm: jest.fn(),
     setSelectedPostId: jest.fn(),
     showPosts: jest.fn(),

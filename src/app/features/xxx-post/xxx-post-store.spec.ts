@@ -1,4 +1,4 @@
-import { Component, Signal } from '@angular/core';
+import { Component, signal, Signal, WritableSignal } from '@angular/core';
 import { mockPost, mockPost1, mockPost2, mockPosts } from './xxx-post.mocks';
 import { of, throwError } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
@@ -31,13 +31,13 @@ describe('XxxPostStore', () => {
     },
   ];
 
-  const mockXxxAlert = {
+  const mockXxxAlert: Partial<XxxAlert> = {
     showError: jest.fn(),
     showInfo: jest.fn(),
     showWarning: jest.fn(),
   }
 
-  const mockXxxLoadingService = {
+  const mockXxxLoadingService: Partial<XxxLoadingService> = {
     loadingOff: jest.fn(),
     loadingOn: jest.fn(),
   }
@@ -48,7 +48,7 @@ describe('XxxPostStore', () => {
   }
 
   const mockXxxUserFacade = {
-    selectedUserId: jest.fn(),
+    selectedUserId: <WritableSignal<number | undefined>>signal(userId)
   }
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe('XxxPostStore', () => {
     spyRouterNavigate = jest.spyOn(router, 'navigateByUrl');
     mockXxxPostData.getPosts.mockReturnValue(of(mockPosts));
     mockXxxPostData.updatePost.mockReturnValue(of(mockPost));
-    mockXxxUserFacade.selectedUserId.mockReturnValue(userId);
+    mockXxxUserFacade.selectedUserId = signal(userId);
   });
 
   afterEach(() => {
@@ -156,11 +156,11 @@ describe('XxxPostStore', () => {
       expect(result()).toBe(true);
     });
 
-      it('should be false when there are posts', () => {
-        store.setSelectedUserId(userId);
-        const result: Signal<boolean> = store.isPostsEmpty;
-        expect(result()).toBe(false);
-      });
+    it('should be false when there are posts', () => {
+      store.setSelectedUserId(userId);
+      const result: Signal<boolean> = store.isPostsEmpty;
+      expect(result()).toBe(false);
+    });
   })
 
   describe('isPostsLoaded', () => {
@@ -258,7 +258,7 @@ describe('XxxPostStore', () => {
     });
 
     it('should not run XxxPostData.getPosts when userId is undefined', () => {
-      mockXxxUserFacade.selectedUserId.mockReturnValue(undefined);
+      mockXxxUserFacade.selectedUserId = signal(undefined);
       store.showPosts();
       expect(mockXxxPostData.getPosts).not.toHaveBeenCalled();
     });

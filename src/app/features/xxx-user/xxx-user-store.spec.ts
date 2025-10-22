@@ -29,13 +29,13 @@ describe('XxxUserStore', () => {
     },
   ];
 
-  const mockXxxAlert = {
+  const mockXxxAlert: Partial<XxxAlert> = {
     showError: jest.fn(),
     showInfo: jest.fn(),
     showWarning: jest.fn(),
   }
 
-  const mockXxxLoadingService = {
+  const mockXxxLoadingService: Partial<XxxLoadingService> = {
     loadingOff: jest.fn(),
     loadingOn: jest.fn(),
   }

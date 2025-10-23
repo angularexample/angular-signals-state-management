@@ -16,8 +16,8 @@ class HostComponent {
 }
 
 describe('XxxContent', () => {
-  let hostFixture: ComponentFixture<HostComponent>;
   let contentComponent: XxxContent;
+  let hostFixture: ComponentFixture<HostComponent>;
 
   const mockXxxContentFacade = {
     contentByKey: jest.fn().mockReturnValue(signal(mockContentHome)),

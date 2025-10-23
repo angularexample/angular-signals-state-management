@@ -9,18 +9,19 @@ import { XxxContentStore } from './xxx-content-store';
 import { XxxContentType } from './xxx-content-types';
 
 describe('XxxContentStore', () => {
-  let service: XxxContentStore;
   let contentKey: string;
-
-  const mockXxxContentData = {
-    getContent: jest.fn()
-  }
 
   const mockXxxAlert = {
     showError: jest.fn(),
     showInfo: jest.fn(),
     showWarning: jest.fn(),
   }
+
+  const mockXxxContentData = {
+    getContent: jest.fn()
+  }
+
+  let service: XxxContentStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,8 +38,7 @@ describe('XxxContentStore', () => {
   });
 
   afterEach(() => {
-    mockXxxAlert.showError.mockClear();
-    mockXxxContentData.getContent.mockClear();
+    jest.clearAllMocks();
   })
 
   describe('constructor phase', () => {

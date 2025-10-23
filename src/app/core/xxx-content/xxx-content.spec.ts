@@ -4,7 +4,7 @@ import { mockContentHome } from './xxx-content.mocks';
 import { XxxContent } from './xxx-content';
 import { XxxContentFacade } from './xxx-content-facade';
 
-const mockContentKey = 'content-key';
+const mockContentKey: string = 'content-key';
 
 // To test the input, use a mock host component.
 @Component({
@@ -12,7 +12,7 @@ const mockContentKey = 'content-key';
   template: '<xxx-content [contentKey]="contentKey"></xxx-content>'
 })
 class HostComponent {
-  contentKey = mockContentKey;
+  contentKey: string = mockContentKey;
 }
 
 describe('XxxContent', () => {
@@ -38,6 +38,10 @@ describe('XxxContent', () => {
     contentComponent = hostFixture.debugElement.children[0].componentInstance;
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
+
   describe('constructor phase', () => {
     it('should be created', () => {
       expect(contentComponent).toBeDefined();
@@ -46,6 +50,7 @@ describe('XxxContent', () => {
 
   describe('OnInit', () => {
     it('should have input value', async () => {
+      // To test a zoneless component that has inputs, use whenStable()
       await hostFixture.whenStable();
       expect(contentComponent.contentKey()).toBe(mockContentKey);
     });

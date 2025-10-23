@@ -3,22 +3,30 @@ import { XxxContentFacade } from './xxx-content-facade';
 import { XxxContentStore } from './xxx-content-store';
 
 describe('XxxContentFacade', () => {
+  const contentKey: string = 'content-key';
+
   const mockXxxContentStore = {
     contentByKey: jest.fn(),
     isContentEmpty: jest.fn(),
     isContentError: jest.fn(),
     showContent: jest.fn(),
   };
-  const contentKey: string = 'content-key';
 
-  TestBed.configureTestingModule({
-    providers: [
-      XxxContentFacade,
-      {provide: XxxContentStore, useValue: mockXxxContentStore},
-    ],
-  });
+  let service: XxxContentFacade
 
-  const service: XxxContentFacade = TestBed.inject(XxxContentFacade);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        XxxContentFacade,
+        {provide: XxxContentStore, useValue: mockXxxContentStore},
+      ],
+    });
+    service = TestBed.inject(XxxContentFacade);
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
 
   describe('constructor phase', () => {
     it('should be created', () => {

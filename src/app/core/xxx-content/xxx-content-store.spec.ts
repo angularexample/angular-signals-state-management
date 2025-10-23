@@ -11,7 +11,7 @@ import { XxxContentType } from './xxx-content-types';
 describe('XxxContentStore', () => {
   let contentKey: string;
 
-  const mockXxxAlert = {
+  const mockXxxAlert: Partial<XxxAlert> = {
     showError: jest.fn(),
     showInfo: jest.fn(),
     showWarning: jest.fn(),

@@ -4,8 +4,8 @@ import { XxxContentFacade } from '../../core/xxx-content/xxx-content-facade';
 import { XxxHeader } from './xxx-header';
 
 describe('XxxHeader', () => {
-  let fixture: ComponentFixture<XxxHeader>;
   let component: XxxHeader;
+  let fixture: ComponentFixture<XxxHeader>;
   const mockXxxContentFacade = {
     contentByKey: jest.fn(),
   }
